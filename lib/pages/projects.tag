@@ -1,6 +1,8 @@
+import RiotControl from 'riotcontrol';
+
 <projects>
   <div class="row">
-    <form class="col s12">
+    <form class="col s12" onkeypress="return event.keyCode != 13">
       <div class="row">
         <div class="input-field col s6">
           <input id="first_name" type="text" class="validate">
@@ -23,12 +25,27 @@
           <label for="password">Password</label>
         </div>
       </div>
-      <div class="row">
-        <div class="input-field col s12">
-          <input id="email" type="email" class="validate">
-          <label for="email">Email</label>
-        </div>
-      </div>
     </form>
+
+
+
+
+
+
+    </div>
   </div>
+
+  <script>
+
+    var self = this;
+    this.on('mount', function() {
+      console.log('mount',this)
+      $('.collapsible').collapsible({
+        accordion : false // A setting that changes the collapsible behavior to expandable instead of the default accordion style
+      });
+    });
+
+
+  </script>
 </projects>
+

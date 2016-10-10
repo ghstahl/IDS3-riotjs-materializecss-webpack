@@ -30,6 +30,7 @@ import RiotControl from 'riotcontrol';
             </tbody>
         </table>
     </div>
+
     <div class="s12 l9 col">
         <table class="highlight">
             <thead>
@@ -106,5 +107,6 @@ import RiotControl from 'riotcontrol';
             });
             RiotControl.trigger('typicode_user_fetch', { id: q.id });
         });
+
     </script>
 </typicode-user-detail>

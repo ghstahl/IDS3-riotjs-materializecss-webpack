@@ -4,16 +4,16 @@ import RiotControl from 'riotcontrol';
 import Sortable from '../js/Sortable.min.js';
 
 <typicode-users>
-
-
+      <form onsubmit={ search }>
+        <label>
         <div if={ results.length }>
           <div class="card  ">
             <div class="card-content  ">
               <span class="card-title">Users</span>
-          <table >
+          <table class="mdl-data-table mdl-js-data-table mdl-data-table--selectable mdl-shadow--2dp">
             <thead>
             <tr>
-              <th >Name</th>
+              <th class="mdl-data-table__cell--non-numeric">Name</th>
               <th>username</th>
               <th>email</th>
               <th>details</th>
@@ -21,7 +21,7 @@ import Sortable from '../js/Sortable.min.js';
             </thead>
             <tbody>
             <tr each={ this.results }>
-              <td>{ this.name }</td>
+              <td class="mdl-data-table__cell--non-numeric">{ this.name }</td>
               <td>{ this.username }</td>
               <td>{ this.email }</td>
               <td>
@@ -55,13 +55,14 @@ import Sortable from '../js/Sortable.min.js';
     this.on('mount', function() {
       var self = this;
       RiotControl.on('typicode_users_fetch_changed', function(result) {
-        console.log('typicode_users_fetch_changed',result);
+        console.log('typicode_users_fetch_changed');
         self.results = result;
         console.log(self.results);
         self.update();
       });
       RiotControl.trigger('typicode_users_fetch');
     });
+
     /**
      * Search callback
      */

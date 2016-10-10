@@ -23,7 +23,7 @@ import Sortable from '../js/Sortable.min.js';
         </div>
 
         <div if={ results.length }>
-          <table class="mdl-data-table mdl-js-data-table mdl-data-table--selectable mdl-shadow--2dp">
+          <table class=" ">
             <thead>
             <tr>
               <th class="mdl-data-table__cell--non-numeric">Title</th>
@@ -36,7 +36,7 @@ import Sortable from '../js/Sortable.min.js';
               <td class="mdl-data-table__cell--non-numeric">{ this.Title }</td>
               <td>{ this.Year }</td>
               <td>
-                <a href="#movie-detail?imdbID={imdbID}" class="btn-floating btn-small waves-effect waves-light red"><i class="material-icons">more</i></a>
+                <a href="#movie-detail/?imdbID={imdbID}" class="btn-floating btn-small waves-effect waves-light red"><i class="material-icons">more</i></a>
               </td>
             </tr>
             </tbody>
@@ -71,58 +71,77 @@ import Sortable from '../js/Sortable.min.js';
 </style>
 
   <script >
-    this.lastSearch = null;
-    this.error = false;
-    this.results = [];
+    var self = this;
+    self.lastSearch = null;
+    self.error = false;
+    self.results = [];
     /**
      * Reset tag attributes to hide the errors and cleaning the results list
      */
-    this.resetData = function() {
-      this.results = [];
-      this.error = false;
+    self.resetData = function() {
+      self.results = [];
+      self.error = false;
     }
 
-    this.on('mount', function() {
+    self.onMoviesChanged = (result)=>{
+      console.log('movies_changed:',result);
+      self.results = result.Search;
+      RiotControl.trigger('localstorage_set',{key:'moviesCache',data:self.results});
+      self.update();
+    }
+
+    self.onMovieCacheResult = (result)=>{
+      console.log('movie_cache_result:',result);
+      if(!result){
+        result =  [];
+      }
+      self.results = result;
+      self.update();
+    }
+
+    self.on('unmount', function() {
+      RiotControl.off('movies_changed', self.onMoviesChanged);
+      RiotControl.off('movie_cache_result', self.onMovieCacheResult);
+
+    });
+
+    self.on('mount', function() {
       var self = this;
-      RiotControl.on('movies_changed', function(movies) {
-        self.results = movies;
-        console.log('_handleMoviesChanged');
-        console.log(self.results);
-        self.update();
-      });
-      RiotControl.trigger('movies_localstorage');
+      RiotControl.on('movies_changed', self.onMoviesChanged);
+      RiotControl.on('movie_cache_result', self.onMovieCacheResult);
+      RiotControl.trigger('localstorage_get',{key:'moviesCache',trigger:'movie_cache_result'});
     });
 
     /**
      * Search callback
      */
-    this.search = function(e) {
+    self.search = function(e) {
       var searchTerm = this.s.value
 
       if (searchTerm === undefined || !searchTerm) {
-        this.resetData()
+        self.resetData()
       } else if (this.lastSearch != searchTerm && searchTerm.length > 1)  {
-        this.resetData()
-        this.isLoading = true
+        self.resetData()
+        self.isLoading = true
         RiotControl.trigger('movies_search', { searchTerm: searchTerm });
    //     this.doApiRequest(searchTerm)
       }
 
-      this.lastSearch = searchTerm
+      self.lastSearch = searchTerm
     }
-    this.detailedSearch = function(imdbID) {
+    self.detailedSearch = function(imdbID) {
       var searchTerm = this.s.value
 
       if (searchTerm === undefined || !searchTerm) {
-        this.resetData()
+        self.resetData()
       } else if (this.lastSearch != searchTerm && searchTerm.length > 1)  {
-        this.resetData()
-        this.isLoading = true
+        self.resetData()
+        self.isLoading = true
         RiotControl.trigger('movie_fetch_detail', { imdbID: imdbID });
         //     this.doApiRequest(searchTerm)
       }
 
-      this.lastSearch = searchTerm
+      self.lastSearch = searchTerm
     }
   </script>
 

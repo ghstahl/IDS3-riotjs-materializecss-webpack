@@ -65,11 +65,11 @@ import Sortable from '../js/Sortable.min.js';
     </style>
 
     <script>
-        var self = this
-
+        var self = this;
         self.lastSearch = null;
         self.error = false;
         self.results = [];
+
         self.inPlayItem = null;
         self.movieDetails = [];
         /**
@@ -79,6 +79,37 @@ import Sortable from '../js/Sortable.min.js';
             this.results = [];
             this.error = false;
         }
+
+        self.onMoviesChanged = (result)=>{
+            console.log('movies_changed:',result);
+            self.results = result.Search;
+            RiotControl.trigger('localstorage_set',{key:'moviesCache',data:self.results});
+            self.update();
+        }
+
+        self.onMovieCacheResult = (result)=>{
+            console.log('movie_cache_result:',result);
+            if(!result){
+                result =  [];
+            }
+            self.results = result;
+            self.update();
+        }
+
+        self.onMovieDetail = (movie)=>{
+            console.log('movie_detail:',movie);
+            self.movieDetails = [];
+            self.update();
+            self.movieDetails.push(movie);
+            self.update();
+        }
+
+
+        self.on('unmount', function() {
+            RiotControl.off('movies_changed', self.onMoviesChanged);
+            RiotControl.off('movie_cache_result', self.onMovieCacheResult);
+            RiotControl.off('movie_detail', self.onMovieDetail);
+        });
 
         self.on('mount', function() {
             var self = this;
@@ -111,20 +142,11 @@ import Sortable from '../js/Sortable.min.js';
                     self.update();
                 }
             });
-            RiotControl.on('movie_detail', function(movie) {
-                self.movieDetails = [];
-                self.movieDetails.push(movie);
-                self.update();
-            });
-            RiotControl.on('movies_changed', function(movies) {
-                self.emptyUL(self.moviecollection);
-                self.results = {};
-                self.update();
-                self.results = movies;
-                console.log(self.results);
-                self.update();
-            });
-            RiotControl.trigger('movies_localstorage');
+
+            RiotControl.on('movies_changed', self.onMoviesChanged);
+            RiotControl.on('movie_cache_result', self.onMovieCacheResult);
+            RiotControl.on('movie_detail', self.onMovieDetail);
+            RiotControl.trigger('localstorage_get',{key:'moviesCache',trigger:'movie_cache_result'});
 
         });
 
