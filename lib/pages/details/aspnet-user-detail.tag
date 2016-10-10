@@ -120,6 +120,28 @@ import RiotControl from 'riotcontrol';
         self.availableRoles = null;
         self.result = null;
         self.is_add_role_allowed = false;
+
+        self.on('before-mount',function(){
+            console.log('on before-mount: aspnet-user-detail');
+            RiotControl.on('aspnet_roles_changed', self.onAspNetRolesChanged);
+            RiotControl.on('aspnet_user_changed', self.onAspNetUserChanged);
+
+        });
+        self.on('unmount', function() {
+            RiotControl.off('aspnet_roles_changed', self.onAspNetRolesChanged);
+            RiotControl.off('aspnet_user_changed', self.onAspNetUserChanged);
+        })
+
+        self.on('mount', function() {
+            var self = this;
+            self.result = null;
+            var q = riot.route.query();
+            console.log('on mount: aspnet-user-detail',q);
+            RiotControl.trigger('aspnet_roles_fetch');
+            RiotControl.trigger('aspnet_user_by_id', { id: q.id });
+            $('select').material_select();
+        });
+
         self.onRoleRemoveConfirmation = (e) =>{
 
             console.log(e)
@@ -198,27 +220,7 @@ import RiotControl from 'riotcontrol';
             self.calcIsAddRoleAllowed();
             self.update();
         }
-        self.on('before-mount',function(){
-            console.log('on before-mount: aspnet-user-detail');
-            RiotControl.on('aspnet_roles_changed', self.onAspNetRolesChanged);
-            RiotControl.on('aspnet_user_changed', self.onAspNetUserChanged);
 
-        });
-        self.on('unmount', function() {
-            RiotControl.off('aspnet_roles_changed', self.onAspNetRolesChanged);
-            RiotControl.off('aspnet_user_changed', self.onAspNetUserChanged);
-        })
-
-        self.on('mount', function() {
-            var self = this;
-            self.result = null;
-            var q = riot.route.query();
-            console.log('on mount: aspnet-user-detail',q);
-            RiotControl.trigger('aspnet_roles_fetch');
-            RiotControl.trigger('aspnet_user_by_id', { id: q.id });
-            $('select').material_select();
-
-        });
         self.collapseAll = () =>{
             $(".collapsible-header").removeClass(function(){
                 return "active";

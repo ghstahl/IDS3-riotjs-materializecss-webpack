@@ -1,6 +1,6 @@
 import '../layouts/sidebar-materializecss.tag';
 import '../components/loading-indicator.tag';
-
+import RiotControl from 'riotcontrol';
 <app>
     <loading-indicator></loading-indicator>
     <sidebar-materializecss title={this.title} menuItems = {this.menuItems}>
@@ -10,9 +10,20 @@ import '../components/loading-indicator.tag';
     </sidebar-materializecss>
 
     <script >
-        this.on('mount', function(){
+        var self = this;
 
-            console.log('app Mounted') // Succeeds, fires once (per mount)
+        self.aspnetbaseurl = opts.aspnetbaseurl;
+        self.typicodebaseurl = opts.typicodebaseurl;
+
+        this.on('before-mount', function() {
+            // before the tag is mounted
+            console.log('app before-mount',self.aspnetbaseurl,self.typicodebaseurl) // Succeeds, fires once (per mount)
+            RiotControl.trigger('aspnet-api-baseurl',self.aspnetbaseurl);
+            RiotControl.trigger('typicode-baseurl',self.typicodebaseurl);
+        })
+
+        self.on('mount', function(){
+            console.log('app mount') // Succeeds, fires once (per mount)
         })
         this.title = "Developer"
         this.menuItems = [
@@ -27,8 +38,6 @@ import '../components/loading-indicator.tag';
             {name:'ToDo:riotux',href:'#todo',view : 'todo'},
             {name:'roles',href:'#roles',view : 'roles'},
             {name:'Client Credentials',href:'#client-credentials',view : 'client-credentials'}
-
-
 
         ]
     </script>

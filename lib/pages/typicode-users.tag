@@ -5,7 +5,7 @@ import Sortable from '../js/Sortable.min.js';
 
 <typicode-users>
       <form onsubmit={ search }>
-        <label>
+
         <div if={ results.length }>
           <div class="card  ">
             <div class="card-content  ">
