@@ -7,10 +7,10 @@
   "scripts": {
     "images": "cpy ./lib/images/*.* ./www/images/",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "bundle": "webpack -p -d --progress --colors",
+    "bundle": "webpack --config webpack.config.prod.js -p -d --progress --colors",
     "build": "npm-run-all images bundle",
-    "serve": "webpack-dev-server --content-base www/ --hot --progress --colors",
-    "dev": "npm-run-all  images serve"
+    "serve": "webpack-dev-server -d --content-base www/ --hot --progress --colors",
+    "dev": "npm-run-all images serve"
   },
   "repository": {
     "type": "git",
@@ -52,8 +52,10 @@
     "path": "^0.12.7",
     "resolve-url-loader": "^1.6.0",
     "riotjs-loader": "^3.0.0",
+    "riotux": "^1.0.63",
     "sass-loader": "^3.1.2",
     "style-loader": "^0.13.0",
+    "uglify-js": "^2.7.3",
     "url-loader": "^0.5.7",
     "webpack": "^1.12.12",
     "webpack-dev-server": "^1.14.1"
