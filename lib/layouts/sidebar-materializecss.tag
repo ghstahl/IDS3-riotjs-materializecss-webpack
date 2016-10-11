@@ -13,6 +13,9 @@ import '../js/ba-tiny-pubsub.js';
         </a>
     </div>
     <ul id="nav-mobile" class="side-nav fixed">
+        <li>
+            <a href="/">Home</a>
+        </li>
         <li each={ parent.menuItems }>
             <a href={this.href}>{ this.name }</a>
         </li>
