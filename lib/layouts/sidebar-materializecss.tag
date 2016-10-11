@@ -3,8 +3,15 @@ import '../js/ba-tiny-pubsub.js';
 <sidebar-materializecss>
     <header>
     <nav class="top-nav">
+
         <div class="container">
-            <div class="nav-wrapper"><a class="page-title right">{title}</a></div>
+
+            <div class="nav-wrapper">
+                <ul class="right">
+                    <li><a href="/Identity/Logoff">Sign Out</a></li>
+                </ul>
+                <a class="page-title middle hide-on-med-and-down">{title}</a>
+            </div>
         </div>
     </nav>
     <div class="container">
