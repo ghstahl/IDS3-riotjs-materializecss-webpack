@@ -23,8 +23,14 @@ import RiotControl from 'riotcontrol';
         })
 
         self.on('mount', function(){
-            console.log('app mount') // Succeeds, fires once (per mount)
+            console.log('app Mounted') // Succeeds, fires once (per mount)
+            RiotControl.trigger('app_mount');
         })
+        self.on('unmount', function(){
+            console.log('app Unmounted') // Succeeds, fires once (per mount)
+            RiotControl.trigger('app_unmount');
+        })
+
         this.title = "Developer"
         this.menuItems = [
             {name:'Typicode Users',href:'#typicode-users',view:'typicode-users'},

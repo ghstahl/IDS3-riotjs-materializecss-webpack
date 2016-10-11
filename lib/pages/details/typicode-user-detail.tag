@@ -83,25 +83,33 @@ import RiotControl from 'riotcontrol';
             </tbody>
         </table>
     </div>
-    </br>
 
-    <p><a href="http://www.imdb.com/title/{ result.imdbID }">IMDB</a></p>
 <style>
     #aside {
              width:350px;
          }
 </style>
     <script>
-        this.result = {};
-        this.on('mount', function() {
-            var self = this;
+        var self = this;
+
+        self.result = {};
+        self.onUserChanged = (user) => {
+            self.result = user;
+            console.log(self.result);
+            self.update();
+        }
+
+        self.on('unmount', function() {
+            console.log('on unmount:');
+            RiotControl.off('typicode_user_changed', self.onUserChanged);
+
+        });
+
+        self.on('mount', function() {
             var q = riot.route.query();
             console.log('on mount: typicode-user-detail',q);
-            RiotControl.on('typicode_user_fetch_changed', function(user) {
-                self.result = user;
-                console.log(self.result);
-                self.update();
-            });
+            RiotControl.on('typicode_user_changed', self.onUserChanged);
+
             $('.collapsible').collapsible({
                 accordion : false // A setting that changes the collapsible behavior to expandable instead of the default accordion style
             });
