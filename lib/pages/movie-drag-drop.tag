@@ -82,8 +82,7 @@ import Sortable from '../js/Sortable.min.js';
 
         self.onMoviesChanged = (result)=>{
             console.log('movies_changed:',result);
-            self.results = result.Search;
-            RiotControl.trigger('localstorage_set',{key:'moviesCache',data:self.results});
+            self.results = result;
             self.update();
         }
 

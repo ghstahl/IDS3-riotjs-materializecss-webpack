@@ -5,12 +5,11 @@ import Sortable from '../js/Sortable.min.js';
 
 <typicode-users>
       <form onsubmit={ search }>
-
         <div if={ results.length }>
           <div class="card  ">
             <div class="card-content  ">
               <span class="card-title">Users</span>
-          <table class="mdl-data-table mdl-js-data-table mdl-data-table--selectable mdl-shadow--2dp">
+          <table class=" ">
             <thead>
             <tr>
               <th class="mdl-data-table__cell--non-numeric">Name</th>
@@ -54,8 +53,8 @@ import Sortable from '../js/Sortable.min.js';
 
     this.on('mount', function() {
       var self = this;
-      RiotControl.on('typicode_users_fetch_changed', function(result) {
-        console.log('typicode_users_fetch_changed');
+      RiotControl.on('typicode_users_changed', function(result) {
+        console.log('typicode_users_changed');
         self.results = result;
         console.log(self.results);
         self.update();

@@ -4,7 +4,6 @@ import RiotControl from 'riotcontrol';
 import Sortable from '../js/Sortable.min.js';
 <home>
       <form onsubmit={ search }>
-        <label>
           <span>
             Search a movie
           </span>
@@ -85,8 +84,7 @@ import Sortable from '../js/Sortable.min.js';
 
     self.onMoviesChanged = (result)=>{
       console.log('movies_changed:',result);
-      self.results = result.Search;
-      RiotControl.trigger('localstorage_set',{key:'moviesCache',data:self.results});
+      self.results = result;
       self.update();
     }
 
@@ -133,7 +131,7 @@ import Sortable from '../js/Sortable.min.js';
       var searchTerm = this.s.value
 
       if (searchTerm === undefined || !searchTerm) {
-        self.resetData()
+
       } else if (this.lastSearch != searchTerm && searchTerm.length > 1)  {
         self.resetData()
         self.isLoading = true

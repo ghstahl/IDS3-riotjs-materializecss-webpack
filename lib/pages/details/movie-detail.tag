@@ -15,23 +15,34 @@ import RiotControl from 'riotcontrol';
             <p>{ result.Plot }</p>
         </div>
     </div>
-<style>
-    #aside {
-             width:350px;
-         }
-</style>
+    <style>
+        #aside {
+                 width:350px;
+             }
+    </style>
+
     <script>
-        this.result = {};
-        this.on('mount', function() {
-            var self = this;
+        var self = this;
+
+        self.result = {};
+
+        self.onMovieDetail = (movie) => {
+            self.result = movie;
+            console.log(self.result);
+            self.update();
+        }
+
+        self.on('unmount', function() {
+            console.log('on unmount:');
+            RiotControl.off('movie_detail', self.onMovieDetail);
+        });
+
+        self.on('mount', function() {
             var q = riot.route.query();
             console.log('on mount: movie-detail',q);
-            RiotControl.on('movie_detail', function(movie) {
-                self.result = movie;
-                console.log(self.result);
-                self.update();
-            });
+            RiotControl.on('movie_detail', self.onMovieDetail);
             RiotControl.trigger('movie_fetch_detail', { imdbID: q.imdbID });
         });
+
     </script>
 </movie-detail>
