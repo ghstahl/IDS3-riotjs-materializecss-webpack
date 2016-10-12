@@ -9,7 +9,7 @@ import RiotControl from 'riotcontrol';
             <div class="collapsible-header"><i class="material-icons">mode_edit</i>{ name }</div>
             <div class="collapsible-body">
                 <p>
-                    <a onclick={ onRemoveRole }
+                    <a onclick={ onRemove }
                        data-message={name}
                        class="waves-effect waves-light red btn">Remove</a>
                 </p>
@@ -19,73 +19,72 @@ import RiotControl from 'riotcontrol';
 
 
         <li>
-
-                <form class="col s12" onkeypress="return event.keyCode != 13">
-                    <div class="row">
-                        <div class="input-field col s6">
-                            <i class="material-icons prefix">account_circle</i>
-                            <input
-                                    type="text" class="validate"
-                                    oninput = { onRoleChange }
-                                    onchange = { onRoleChange }
-                                    onkeypress = { onKeyPress }
-                                    name='r' >
-                            <label >Friendly Client Name</label>
-                        </div>
-
-                    </div>
-                    <div class="row">
+            <form class="col s12" onkeypress="return event.keyCode != 13">
+                <div class="row">
                     <div class="input-field col s6">
-                        <i class="material-icons prefix">timeline</i>
-                        <select>
-                            <option value="" disabled selected>Choose your flow</option>
-                            <option value="1">Resource Owner</option>
-                            <option value="2">Credential</option>
+                        <i class="material-icons prefix">account_circle</i>
+                        <input
+                                type="text" class="validate"
+                                oninput = { onRChange }
+                                onchange = { onRChange }
+                                onkeypress = { onKeyPress }
+                                name='r' >
+                        <label >Friendly Client Name</label>
+                    </div>
 
+                </div>
+                <div class="row">
+                    <div class="input-field col s6" id="flowPickerContainer">
+                        <i class="material-icons prefix">timeline</i>
+                        <select id="selectFlow">
+                            <option value="-1" disabled selected>Add New Flow...</option>
+                            <option  each="{availableFlows}" value="{Name}"
+                                     onChange={this.onSelectChanged}
+                                     data-message={Name}>{Name}</option>
                         </select>
                         <label>Flow Type</label>
-                        </div>
                     </div>
-                    <div class="row">
-                        <div class="input-field col s6">
-                            <i class="material-icons prefix">scope</i>
-                            <select>
-                                <option value="" disabled selected>Choose your scopes</option>
-                                <option value="1">Resource Owner</option>
-                                <option value="2">Credential</option>
+                </div>
 
-                            </select>
-                            <label>Scopes</label>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col s6">
-                            <a
-                                    id="addRoleButton"
-                                    disabled={ !isRoleAddable }
-                                    onclick={onAddRole}
-                                    class="waves-effect waves-light btn right">Add New Client</a>
-                        </div>
-
-
+                <div class="row">
+                    <div class="input-field col s6" id="scopePickerContainer">
+                        <i class="material-icons prefix">scope</i>
+                        <select id="selectScope">
+                            <option value="-1" disabled selected>Add New Scope...</option>
+                            <option  each="{availableScopes}" value="{Name}"
+                                     onChange={this.onSelectChanged}
+                                     data-message={Name}>{Name}</option>
+                        </select>
+                        <label>Scopes</label>
                     </div>
 
-                </form>
+                </div>
+                <div class="row">
+                    <div class="col s6">
+                        <a
+                                id="addButton"
+                                disabled={ !isAddable }
+                                onclick={onAdd}
+                                class="waves-effect waves-light btn right">Add New Client</a>
+                    </div>
+                </div>
+            </form>
         </li>
 
     </ul>
 
-
     <script>
         var self = this;
         self.items  = [];
+        self.availableScopes = [{Name:"offline-access"},{Name:"api1"}]
+        self.availableFlows = [{Name:"Credentials"},{Name:"Resource Owner"}]
         self.roles = ["Should","Never","See","This"]
-        self.isRoleAddable = false;
-        self.lastRole = null;
+        self.isAddable = false;
+        self.lastR = null;
 
         self.containsItemInItems = function(items,value){
-            var result = self.roles.filter(function( obj ) {
-                return obj == value;
+            var result = items.filter(function( obj ) {
+                return obj.friendlyName == value.friendlyName;
             });
             return result.length > 0;
         }
@@ -96,6 +95,13 @@ import RiotControl from 'riotcontrol';
             self.update();
         }
 
+        self.onSelectChange = (e) =>{
+            console.log('onSelectChange',e)
+            self.calcOnAddable()
+            self.update();
+        }
+
+
         self.onRolesChanged =  function(roles) {
             console.log('roles_changed',roles)
             self.roles = roles;
@@ -103,6 +109,7 @@ import RiotControl from 'riotcontrol';
         }
 
         self.on('unmount', function() {
+            RiotControl.off('client-credential-items-changed', self.onItemsChanged)
             RiotControl.off('roles_changed', self.onRolesChanged)
         });
 
@@ -112,45 +119,61 @@ import RiotControl from 'riotcontrol';
                 accordion : false // A setting that changes the collapsible behavior to expandable instead of the default accordion style
             });
             $('select').material_select();
+            $('#scopePickerContainer').on('change', 'select',self.onSelectChange);
+            $('#flowPickerContainer').on('change', 'select',self.onSelectChange);
+
             RiotControl.on('client-credential-items-changed', self.onItemsChanged)
             RiotControl.on('roles_changed', self.onRolesChanged)
             RiotControl.trigger('roles_fetch');
             RiotControl.trigger('client-credential-items-get');
-            self.calcOnRoleAddable();
+            self.calcOnAddable();
         });
 
-        self.onRemoveRole = (e) =>{
-
-            console.log('onRemoveRole',e,e.target.dataset.message)
+        self.onRemove = (e) =>{
+            console.log('onRemove',e,e.target.dataset.message)
             RiotControl.trigger('roles_remove',  e.target.dataset.message );
             self.collapseAll();
         }
 
-        self.onAddRole = function() {
-            if(self.isRoleAddable == true){
-                console.log('onAddRole',self.lastRole)
-                RiotControl.trigger('roles_add',self.lastRole);
-                self.lastRole = "";
-                self.r.value  = self.lastRole;
-                self.calcOnRoleAddable();
-            }
-        }
-        self.calcOnRoleAddable = ()=>{
-            if(self.lastRole && self.lastRole.length > 1){
-                self.isRoleAddable =  true;
-                self.addRoleCallback = self.onAddRole;
-            }else{
-                self.isRoleAddable =  false;
-                self.addRoleCallback = null;
-            }
-        }
-        self.onRoleChange = function(e) {
-            console.log('onRoleChange',self.r,self.r.value);
-            var roleTerm = self.r.value
-            self.lastRole = roleTerm
+        self.onAdd = function() {
+            if(self.isAddable == true){
 
-            self.calcOnRoleAddable();
-            console.log(self.isRoleAddable)
+                var record = {
+                    friendlyName:self.lastR,
+                    flow:self.selectFlow.value,
+                    scope:self.selectScope.value
+                }
+
+                console.log('onAdd',record)
+                RiotControl.trigger('client-credential-add',record,self.containsItemInItems);
+                self.lastR = "";
+                self.r.value  = self.lastR;
+                self.selectFlow.value = "-1";
+                self.selectScope.value = "-1";
+                self.calcOnAddable();
+                self.update();
+            }
+        }
+        self.calcOnAddable = ()=>{
+            if(self.lastR &&
+                    self.lastR.length > 1 &&
+                    self.selectFlow.value != "-1" &&
+                    self.selectScope.value != "-1"
+            ){
+                self.isAddable =  true;
+
+            }else{
+                self.isAddable =  false;
+            }
+            console.log('calcOnAddable',self.isAddable)
+        }
+        self.onRChange = function(e) {
+            console.log('onRChange',self.r,self.r.value);
+            var rValue = self.r.value
+            self.lastR = rValue
+
+            self.calcOnAddable();
+
         }
 
         self.onKeyPress = function(e) {
@@ -160,8 +183,8 @@ import RiotControl from 'riotcontrol';
             console.log('onKeyPress',keyCode,e);
             if(keyCode== 13){
                 event.preventDefault();
-                if(self.isRoleAddable){
-                    self.onAddRole();
+                if(self.isAddable){
+                    self.onAdd();
                 }
                 return false;
             }else{
