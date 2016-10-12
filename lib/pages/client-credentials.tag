@@ -78,10 +78,23 @@ import RiotControl from 'riotcontrol';
 
     <script>
         var self = this;
+        self.items  = [];
         self.roles = ["Should","Never","See","This"]
         self.isRoleAddable = false;
         self.lastRole = null;
 
+        self.containsItemInItems = function(items,value){
+            var result = self.roles.filter(function( obj ) {
+                return obj == value;
+            });
+            return result.length > 0;
+        }
+
+        self.onItemsChanged = function(items){
+            console.log('client-credential-items-changed',items)
+            self.items = items;
+            self.update();
+        }
 
         self.onRolesChanged =  function(roles) {
             console.log('roles_changed',roles)
@@ -99,8 +112,10 @@ import RiotControl from 'riotcontrol';
                 accordion : false // A setting that changes the collapsible behavior to expandable instead of the default accordion style
             });
             $('select').material_select();
+            RiotControl.on('client-credential-items-changed', self.onItemsChanged)
             RiotControl.on('roles_changed', self.onRolesChanged)
             RiotControl.trigger('roles_fetch');
+            RiotControl.trigger('client-credential-items-get');
             self.calcOnRoleAddable();
         });
 

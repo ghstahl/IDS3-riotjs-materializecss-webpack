@@ -4,13 +4,25 @@ import RiotControl from 'riotcontrol';
 
 <loading-indicator>
 
-    this.on('mount', function() {
+    <script>
         var self = this;
-        RiotControl.on('progress_start', function() {
+        self.onProgressStart = () =>{
             nprogress.start();
-        });
-        RiotControl.on('progress_done', function() {
+        }
+        self.onProgressDone = () =>{
             nprogress.done();
+        }
+        self.on('mount', function() {
+            console.log('loading-indicator mount......')
+            RiotControl.on('progress_start', self.onProgressStart);
+            RiotControl.on('progress_done', self.onProgressDone);
         });
-    });
+
+        self.on('unmount', function() {
+            console.log('loading-indicator unmount......')
+            RiotControl.off('progress_start', self.onProgressStart);
+            RiotControl.off('progress_done', self.onProgressDone);
+        });
+
+    </script>
 </loading-indicator>

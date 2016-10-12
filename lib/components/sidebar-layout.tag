@@ -38,17 +38,20 @@ import './sidebar-layout.css';
         <!-- /#page-content-wrapper -->
 
     </div>
-    this.title = opts.title
-    this.menuItems = opts.menuItems;
-    <!-- /#wrapper -->
-    this.toggle = (e) => {
-        e.preventDefault();
-        $("#wrapper").toggleClass("toggled");
-    }
-    this.route = (evt) => {
-        riot.route(evt.item.view)
-    };
-
+    <script>
+        var self = this;
+        self.title = opts.title
+        self.menuItems = opts.menuItems;
+        <!-- /#wrapper -->
+        self.toggle = (e) => {
+            e.preventDefault();
+            $("#wrapper").toggleClass("toggled");
+        }
+        self.route = (evt) => {
+            riot.route(evt.item.view)
+        };
+    </script>
 </sidebar-layout>
+
 
 
