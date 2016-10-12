@@ -82,9 +82,15 @@ import RiotControl from 'riotcontrol';
         self.isAddable = false;
         self.lastR = null;
 
-        self.containsItemInItems = function(items,value){
+        self.excludeItemFromItems = (items,item)=>{
             var result = items.filter(function( obj ) {
-                return obj.friendlyName == value.friendlyName;
+                return obj.friendlyName.toUpperCase() != value.friendlyName.toUpperCase();
+            });
+            return result;
+        }
+        self.containsItemInItems = (items,item) =>{
+            var result = items.filter(function( obj ) {
+                return obj.friendlyName.toUpperCase() == item.friendlyName.toUpperCase();
             });
             return result.length > 0;
         }
