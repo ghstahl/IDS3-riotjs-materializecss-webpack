@@ -18,40 +18,61 @@ import RiotControl from 'riotcontrol';
 
 
 
-        <li class="collection-item">
-            <form  class="col s12">
+        <li>
 
-            <div class="row">
-                <div class="input-field col s0">
-                    <a id="addRoleButton"
-                       disabled={ !isRoleAddable }
-                       onclick={onAddRole}
-                       class="btn-floating btn-medium waves-effect waves-light "><i class="material-icons">add</i></a>
-                </div>
-                <div class="input-field col s10">
-                    <input
-                            type="text" class="validate"
-                             oninput = { onRoleChange }
-                             onchange = { onRoleChange }
-                             onkeypress = { onKeyPress }
-                             name='r' >
-                    <label>New Client Friendly Name</label>
-                </div>
-            </div>
-            <div class="row">
-                <div class="input-field col ">
-                    <select>
-                        <option value="" disabled selected>Choose your option</option>
-                        <option value="1">Option 1</option>
-                        <option value="2">Option 2</option>
-                        <option value="3">Option 3</option>
-                    </select>
-                    <label>Materialize Select</label>
-                </div>
+                <form class="col s12" onkeypress="return event.keyCode != 13">
+                    <div class="row">
+                        <div class="input-field col s6">
+                            <i class="material-icons prefix">account_circle</i>
+                            <input
+                                    type="text" class="validate"
+                                    oninput = { onRoleChange }
+                                    onchange = { onRoleChange }
+                                    onkeypress = { onKeyPress }
+                                    name='r' >
+                            <label >Friendly Client Name</label>
+                        </div>
 
-            </div>
-        </form>
+                    </div>
+                    <div class="row">
+                    <div class="input-field col s6">
+                        <i class="material-icons prefix">timeline</i>
+                        <select>
+                            <option value="" disabled selected>Choose your flow</option>
+                            <option value="1">Resource Owner</option>
+                            <option value="2">Credential</option>
+
+                        </select>
+                        <label>Flow Type</label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="input-field col s6">
+                            <i class="material-icons prefix">scope</i>
+                            <select>
+                                <option value="" disabled selected>Choose your scopes</option>
+                                <option value="1">Resource Owner</option>
+                                <option value="2">Credential</option>
+
+                            </select>
+                            <label>Scopes</label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col s6">
+                            <a
+                                    id="addRoleButton"
+                                    disabled={ !isRoleAddable }
+                                    onclick={onAddRole}
+                                    class="waves-effect waves-light btn right">Add New Client</a>
+                        </div>
+
+
+                    </div>
+
+                </form>
         </li>
+
     </ul>
 
 
@@ -77,6 +98,7 @@ import RiotControl from 'riotcontrol';
             $('.collapsible').collapsible({
                 accordion : false // A setting that changes the collapsible behavior to expandable instead of the default accordion style
             });
+            $('select').material_select();
             RiotControl.on('roles_changed', self.onRolesChanged)
             RiotControl.trigger('roles_fetch');
             self.calcOnRoleAddable();

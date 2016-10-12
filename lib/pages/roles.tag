@@ -18,7 +18,7 @@ import RiotControl from 'riotcontrol';
 
 
 
-        <li class="collection-item">
+        <li >
             <form  class="col s12">
 
             <div class="row">

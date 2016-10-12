@@ -26,13 +26,6 @@ import RiotControl from 'riotcontrol';
         </div>
       </div>
     </form>
-
-
-
-
-
-
-    </div>
   </div>
 
   <script>

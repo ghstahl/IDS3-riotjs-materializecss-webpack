@@ -16,7 +16,8 @@ import RiotControl from 'riotcontrol';
 
 
 
-        <li class="collection-item">
+        <li >
+
             <form  class="col s12">
 
             <div class="row">
@@ -36,7 +37,9 @@ import RiotControl from 'riotcontrol';
                     <label>Add a new role.</label>
                 </div>
             </div>
+
         </form>
+
         </li>
     </ul>
 
