@@ -1,19 +1,19 @@
 import RiotControl from 'riotcontrol';
+import './components/credential-card.tag'
 
 <client-credentials>
 
 
     <ul class="collapsible collection with-header">
         <li class="collection-header"><h5>Client Credentials</h5></li>
+        <li  each="{ item in items }">
 
-        <li each="{ items }">
-            <div class="collapsible-header"><i class="material-icons">mode_edit</i>{ friendlyName }</div>
+            <div class="collapsible-header"><i class="material-icons">mode_edit</i>{ item.friendlyName }</div>
             <div class="collapsible-body">
-                <p>
-                    <a onclick={ onRemove }
-                       data-message={friendlyName}
-                       class="waves-effect waves-light red btn">Remove</a>
-                </p>
+                <credential-card
+                         item={ item }
+                         onremove = {parent.onRemove}>
+                </credential-card>
             </div>
         </li>
     </ul>
@@ -84,14 +84,16 @@ import RiotControl from 'riotcontrol';
         self.lastR = null;
 
         self.excludeItemFromItems = (items,item)=>{
+            var fn = item.friendlyName.toUpperCase()
             var result = items.filter(function( obj ) {
-                return obj.friendlyName.toUpperCase() != value.friendlyName.toUpperCase();
+                return obj.friendlyName.toUpperCase() != fn;
             });
             return result;
         }
         self.containsItemInItems = (items,item) =>{
+            var fn = item.friendlyName.toUpperCase()
             var result = items.filter(function( obj ) {
-                return obj.friendlyName.toUpperCase() == item.friendlyName.toUpperCase();
+                return obj.friendlyName.toUpperCase() == fn;
             });
             return result.length > 0;
         }
@@ -143,7 +145,9 @@ import RiotControl from 'riotcontrol';
 
         self.onRemove = (e) =>{
             console.log('onRemove',e,e.target.dataset.message)
-            RiotControl.trigger('roles_remove',  e.target.dataset.message );
+            RiotControl.trigger('client-credential-remove',
+                    {friendlyName:e.target.dataset.message},
+                    self.excludeItemFromItems );
             self.collapseAll();
         }
 
