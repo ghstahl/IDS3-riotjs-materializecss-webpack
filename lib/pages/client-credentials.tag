@@ -4,22 +4,24 @@ import RiotControl from 'riotcontrol';
 
 
     <ul class="collapsible collection with-header">
-        <li class="collection-header"><h4>Client Credentials</h4></li>
-        <li each="{ name, i in roles }">
-            <div class="collapsible-header"><i class="material-icons">mode_edit</i>{ name }</div>
+        <li class="collection-header"><h5>Client Credentials</h5></li>
+
+        <li each="{ items }">
+            <div class="collapsible-header"><i class="material-icons">mode_edit</i>{ friendlyName }</div>
             <div class="collapsible-body">
                 <p>
                     <a onclick={ onRemove }
-                       data-message={name}
+                       data-message={friendlyName}
                        class="waves-effect waves-light red btn">Remove</a>
                 </p>
             </div>
         </li>
+    </ul>
 
-
-
+    <ul class="collection with-header">
+        <li class="collection-header"><h5>Create New Client Credentials</h5></li>
         <li>
-            <form class="col s12" onkeypress="return event.keyCode != 13">
+            <form class="col s12" >
                 <div class="row">
                     <div class="input-field col s6">
                         <i class="material-icons prefix">account_circle</i>
@@ -37,7 +39,7 @@ import RiotControl from 'riotcontrol';
                     <div class="input-field col s6" id="flowPickerContainer">
                         <i class="material-icons prefix">timeline</i>
                         <select id="selectFlow">
-                            <option value="-1" disabled selected>Add New Flow...</option>
+                            <option  value="-1" disabled selected>Add New Flow...</option>
                             <option  each="{availableFlows}" value="{Name}"
                                      onChange={this.onSelectChanged}
                                      data-message={Name}>{Name}</option>
@@ -48,9 +50,9 @@ import RiotControl from 'riotcontrol';
 
                 <div class="row">
                     <div class="input-field col s6" id="scopePickerContainer">
-                        <i class="material-icons prefix">scope</i>
+                        <i class="material-icons prefix">my_location</i>
                         <select id="selectScope">
-                            <option value="-1" disabled selected>Add New Scope...</option>
+                            <option id="selectScope_default" value="-1" disabled selected>Add New Scope...</option>
                             <option  each="{availableScopes}" value="{Name}"
                                      onChange={this.onSelectChanged}
                                      data-message={Name}>{Name}</option>
@@ -72,13 +74,12 @@ import RiotControl from 'riotcontrol';
         </li>
 
     </ul>
-
     <script>
         var self = this;
         self.items  = [];
         self.availableScopes = [{Name:"offline-access"},{Name:"api1"}]
         self.availableFlows = [{Name:"Credentials"},{Name:"Resource Owner"}]
-        self.roles = ["Should","Never","See","This"]
+
         self.isAddable = false;
         self.lastR = null;
 
@@ -107,33 +108,38 @@ import RiotControl from 'riotcontrol';
             self.update();
         }
 
-
-        self.onRolesChanged =  function(roles) {
-            console.log('roles_changed',roles)
-            self.roles = roles;
-            self.update();
-        }
-
         self.on('unmount', function() {
             RiotControl.off('client-credential-items-changed', self.onItemsChanged)
-            RiotControl.off('roles_changed', self.onRolesChanged)
         });
 
         self.on('mount', function() {
             console.log('mount',this)
+            riot.observable(self.selectFlow) // Riot provides our event emitter.
+            riot.observable(self.selectScope) // Riot provides our event emitter.
+
             $('.collapsible').collapsible({
                 accordion : false // A setting that changes the collapsible behavior to expandable instead of the default accordion style
             });
             $('select').material_select();
+            self.selectFlow.on('contentChanged', function() {
+                console.log('selectFlow::contentChanged')
+                // re-initialize (update)
+                $(this).material_select();
+            });
+            self.selectScope.on('contentChanged', function() {
+                console.log('selectScope::contentChanged')
+                // re-initialize (update)
+                $(this).material_select();
+            });
+
             $('#scopePickerContainer').on('change', 'select',self.onSelectChange);
             $('#flowPickerContainer').on('change', 'select',self.onSelectChange);
 
             RiotControl.on('client-credential-items-changed', self.onItemsChanged)
-            RiotControl.on('roles_changed', self.onRolesChanged)
-            RiotControl.trigger('roles_fetch');
             RiotControl.trigger('client-credential-items-get');
             self.calcOnAddable();
         });
+
 
         self.onRemove = (e) =>{
             console.log('onRemove',e,e.target.dataset.message)
@@ -157,6 +163,10 @@ import RiotControl from 'riotcontrol';
                 self.selectFlow.value = "-1";
                 self.selectScope.value = "-1";
                 self.calcOnAddable();
+
+                self.selectFlow.trigger('contentChanged');
+                self.selectScope.trigger('contentChanged');
+
                 self.update();
             }
         }
