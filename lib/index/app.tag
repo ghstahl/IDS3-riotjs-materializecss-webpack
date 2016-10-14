@@ -13,22 +13,26 @@ import RiotControl from 'riotcontrol';
         var self = this;
 
         self.aspnetbaseurl = opts.aspnetbaseurl;
+        self.identityserverbaseurl = opts.identityserverbaseurl;
+
+
         self.typicodebaseurl = opts.typicodebaseurl;
 
         this.on('before-mount', function() {
             // before the tag is mounted
             console.log('app before-mount',self.aspnetbaseurl,self.typicodebaseurl) // Succeeds, fires once (per mount)
             RiotControl.trigger('aspnet-api-baseurl',self.aspnetbaseurl);
+            RiotControl.trigger('identityserver-api-baseurl',self.identityserverbaseurl);
             RiotControl.trigger('typicode-baseurl',self.typicodebaseurl);
         })
 
         self.on('mount', function(){
             console.log('app Mounted') // Succeeds, fires once (per mount)
-            RiotControl.trigger('app_mount');
+            RiotControl.trigger('app-mount');
         })
         self.on('unmount', function(){
             console.log('app Unmounted') // Succeeds, fires once (per mount)
-            RiotControl.trigger('app_unmount');
+            RiotControl.trigger('app-unmount');
         })
 
         this.title = "Developer"

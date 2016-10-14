@@ -83,8 +83,25 @@ import RiotControl from 'riotcontrol';
 
             </form>
         </div>
+
+    </div>
+    <div  class="s12 l9 col">
+        <table class="highlight">
+            <thead>
+            <tr>
+                <th><h5>IdentityServer</h5></th>
+            </tr>
+            </thead>
+        </table>
+
+        <div if={isUserEnrolledInIdentityServer}>
+            <a class="waves-effect waves-light btn">Already Enrolled</a>
+        </div>
+        <div if={!isUserEnrolledInIdentityServer}>
+            <a class="waves-effect waves-light btn">Enroll</a>
         </div>
     </div>
+
 
     <!-- Dropdown Structure -->
 
@@ -92,7 +109,6 @@ import RiotControl from 'riotcontrol';
             <li><a >Cancel</a></li>
             <li class="divider"></li>
             <li><a  data-message=true onclick={ onRoleRemoveConfirmation }>Confirm Delete</a></li>
-
 
         </ul>
 
@@ -113,34 +129,66 @@ import RiotControl from 'riotcontrol';
 
 </style>
     <script>
+
+
         var self = this;
         self.is_display_user_roles = true;
         self.inPlayItem = null;
         self.systemRoles = null;
         self.availableRoles = null;
         self.result = null;
+        self.systemScopes = null;
+        self.allowedUserScopes = null;
         self.is_add_role_allowed = false;
+        self.isUserEnrolledInIdentityServer = false;
 
         self.on('before-mount',function(){
             console.log('on before-mount: aspnet-user-detail');
-            RiotControl.on('aspnet_roles_changed', self.onAspNetRolesChanged);
-            RiotControl.on('aspnet_user_changed', self.onAspNetUserChanged);
+            for (var i = 0, len = self.riotControlMap.length; i < len; i++) {
+                console.log(self.riotControlMap[i])
 
+                RiotControl.on(self.riotControlMap[i].evt, self.riotControlMap[i].handler);
+            }
         });
         self.on('unmount', function() {
-            RiotControl.off('aspnet_roles_changed', self.onAspNetRolesChanged);
-            RiotControl.off('aspnet_user_changed', self.onAspNetUserChanged);
+            for (var i = 0, len = self.riotControlMap.length; i < len; i++) {
+                RiotControl.off(self.riotControlMap[i].evt, self.riotControlMap[i].handler);
+            }
         })
 
         self.on('mount', function() {
-            var self = this;
             self.result = null;
             var q = riot.route.query();
             console.log('on mount: aspnet-user-detail',q);
             RiotControl.trigger('aspnet_roles_fetch');
             RiotControl.trigger('aspnet_user_by_id', { id: q.id });
+            RiotControl.trigger('identityserver-admin-users-get', { userId: q.id });
+
             $('select').material_select();
         });
+
+        self.onIdentityServerScopesUsersGetResult= (query,data) =>{
+            console.log('identityserver-admin-scopes-users-get-result',query,data)
+            self.allowedUserScopes = data;
+            self.update();
+        }
+
+        self.onIdentityServerScopeGetResult= (query,data) =>{
+            console.log('identityserver-admin-scopes-get-result',query,data)
+            self.systemScopes = data;
+            self.update();
+        }
+
+        self.onIdentityServerUserGetResult = (query,data) =>{
+            console.log('identityserver-admin-users-get-result',query,data)
+            if(data && data.UserId == query.userId){
+                self.isUserEnrolledInIdentityServer = true;
+                self.update();
+                RiotControl.trigger('identityserver-admin-scopes-get');
+                RiotControl.trigger('identityserver-admin-scopes-users-get', { userId:  query.userId });
+            }
+            console.log(self.isUserEnrolledInIdentityServer)
+        }
 
         self.onRoleRemoveConfirmation = (e) =>{
 
@@ -154,8 +202,8 @@ import RiotControl from 'riotcontrol';
             RiotControl.trigger('aspnet_user_role_remove', { id: self.result.User.Id,role: e.target.dataset.message});
             self.collapseAll();
         }
-        self.onAddRole = (e) =>{
 
+        self.onAddRole = (e) =>{
             console.log(e)
             console.log('onAddRole',e.target.value)
             RiotControl.trigger('aspnet_user_roles_add', { id: self.result.User.Id,role: e.target.value});
@@ -228,5 +276,19 @@ import RiotControl from 'riotcontrol';
             $(".collapsible").collapsible({accordion: true});
             $(".collapsible").collapsible({accordion: false});
         }
+        self.riotControlMap = [
+            {evt:'aspnet_roles_changed', handler:self.onAspNetRolesChanged},
+            {evt:'aspnet_user_changed', handler:self.onAspNetUserChanged},
+            {evt:'identityserver-admin-users-get-result', handler:self.onIdentityServerUserGetResult},
+            {evt:'identityserver-admin-scopes-get-result', handler:self.onIdentityServerScopeGetResult},
+            {evt:'identityserver-admin-scopes-users-get-result', handler:self.onIdentityServerScopesUsersGetResult},
+        ]
     </script>
 </aspnet-user-detail>
+
+
+
+
+
+
+
