@@ -85,7 +85,7 @@ import RiotControl from 'riotcontrol';
         </div>
 
     </div>
-    <div  class="s12 l9 col">
+    <div if={hasDeveloperRole}  class="s12 l9 col">
         <table class="highlight">
             <thead>
             <tr>
@@ -140,6 +140,7 @@ import RiotControl from 'riotcontrol';
         self.systemScopes = null;
         self.allowedUserScopes = null;
         self.is_add_role_allowed = false;
+        self.hasDeveloperRole = false;
         self.isUserEnrolledInIdentityServer = false;
 
         self.on('before-mount',function(){
@@ -266,6 +267,11 @@ import RiotControl from 'riotcontrol';
             }
 
             self.calcIsAddRoleAllowed();
+
+            var result = self.result.Roles.filter(function( name ) {
+                return name == "Developer";
+            });
+            self.hasDeveloperRole = (result && result.length > 0);
             self.update();
         }
 
