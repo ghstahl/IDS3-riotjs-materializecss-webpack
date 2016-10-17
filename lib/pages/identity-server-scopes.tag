@@ -46,7 +46,7 @@ import RiotControl from 'riotcontrol';
 
     <script>
         var self = this;
-        self.scopes = [ ]
+        self.scopes = []
         self.isScopeAddable = false;
         self.lastScope = null;
 
