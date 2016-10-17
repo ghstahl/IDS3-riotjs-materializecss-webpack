@@ -40,6 +40,7 @@ import RiotControl from 'riotcontrol';
             {name:'Typicode Users',href:'#typicode-users',view:'typicode-users'},
             {name:'AspNet Users',href:'#aspnet-users',view:'aspnet-users'},
             {name:'AspNet Roles',href:'#aspnet-roles',view : 'aspnet-roles'},
+            {name:'Identity Server Scopes',href:'#identity-server-scopes',view : 'identity-server-scopes'},
             {name:'Movies',href:'#home',view : 'home',materialIcon:'toll'},
             {name:'Name 2',href:'#projects',view : 'projects'},
             {name:'Drag&Drop',href:'#drag-drop',view : 'drag-drop'},
