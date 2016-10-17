@@ -42,19 +42,21 @@ import RiotControl from 'riotcontrol';
                 </thead>
                 <tbody></tbody>
             </table>
-            <ul class="collapsible" data-collapsible="accordion">
-                <li each="{ name, i in result.Roles }">
-                    <div class="collapsible-header"><i class="material-icons">mode_edit</i>{ name }</div>
-                    <div class="collapsible-body">
-                        <p>
-                            <a onclick={ onRemoveRole }
-                               data-message={name}
-                               class="waves-effect waves-light red btn">Remove</a>
-                        </p>
+            <div if={hasRoles}>
+                <ul class="collapsible" data-collapsible="accordion">
+                    <li each="{ name, i in result.Roles }">
+                        <div class="collapsible-header"><i class="material-icons">mode_edit</i>{ name }</div>
+                        <div class="collapsible-body">
+                            <p>
+                                <a onclick={ onRemoveRole }
+                                   data-message={name}
+                                   class="waves-effect waves-light red btn">Remove</a>
+                            </p>
 
-                    </div>
-                </li>
-            </ul>
+                        </div>
+                    </li>
+                </ul>
+            </div>
         </div>
         <div if={is_add_role_allowed}  class="row">
             <form  class="col s12">
@@ -64,7 +66,6 @@ import RiotControl from 'riotcontrol';
                             <option value="-1" disabled selected>Add New Role...</option>
                             <option  each="{availableRoles}" value="{Name}"
                                      onChange={this.onAddRole}
-
                                      data-message={Name}>{Name}</option>
                         </select>
 
@@ -80,10 +81,14 @@ import RiotControl from 'riotcontrol';
             <li><a  data-message=true onclick={ onRoleRemoveConfirmation }>Confirm Delete</a></li>
         </ul>
     </div>
-
-    <div if={hasDeveloperRole}  class="s12 l9 col">
+    <div if={hasDeveloperRole}>
         <h5>Identity Server Settings</h5>
-        <br>
+        <div if={!isUserEnrolledInIdentityServer}>
+            <a class="waves-effect waves-light btn">Enroll</a>
+        </div>
+    </div>
+
+    <div if={hasDeveloperRole && isUserEnrolledInIdentityServer}  class="s12 l9 col">
         <table class="highlight">
             <thead>
             <tr>
@@ -91,15 +96,37 @@ import RiotControl from 'riotcontrol';
             </tr>
             </thead>
         </table>
+        <div if={hasUserScopes}>
+            <ul class="collapsible" data-collapsible="accordion">
+                <li each="{ name, i in userScopes }">
+                    <div class="collapsible-header"><i class="material-icons">mode_edit</i>{ name }</div>
+                    <div class="collapsible-body">
+                        <p>
+                            <a onclick={ onRemoveUserScope }
+                               data-message={name}
+                               class="waves-effect waves-light red btn">Remove</a>
+                        </p>
 
-        <div if={isUserEnrolledInIdentityServer}>
-            <a class="waves-effect waves-light btn">Already Enrolled</a>
+                    </div>
+                </li>
+            </ul>
         </div>
-        <div if={!isUserEnrolledInIdentityServer}>
-            <a class="waves-effect waves-light btn">Enroll</a>
+
+        <div if={is_add_scope_allowed}  class="row">
+            <form  class="col s12">
+                <div class="row">
+                    <div class="input-field col s12" id="scopePickerContainer">
+                        <select id="selectScope">
+                            <option value="-1" disabled selected>Add New Scope...</option>
+                            <option  each="{availableScopes}" value="{Name}"
+                                     onChange={this.onAddScope}
+                                     data-message={Name}>{Name}</option>
+                        </select>
+                    </div>
+                </div>
+            </form>
         </div>
     </div>
-
 
 
 
@@ -122,16 +149,21 @@ import RiotControl from 'riotcontrol';
     <script>
         var self = this;
 
-        self.scopes = []
+        self.scopes = null;
+        self.userScopes = null;
+        self.hasUserScopes = false;
+        self.availableScopes = null;
         self.is_display_user_roles = true;
         self.inPlayItem = null;
         self.systemRoles = null;
         self.availableRoles = null;
         self.result = null;
-        self.systemScopes = null;
+
         self.allowedUserScopes = null;
         self.is_add_role_allowed = false;
+        self.is_add_scope_allowed = false;
         self.hasDeveloperRole = false;
+        self.hasRoles = false;
         self.isUserEnrolledInIdentityServer = false;
 
         self.on('before-mount',function(){
@@ -152,10 +184,8 @@ import RiotControl from 'riotcontrol';
             self.result = null;
             var q = riot.route.query();
             console.log('on mount: aspnet-user-detail',q);
-
-            RiotControl.on('identityserver-admin-scopes-get-result', self.onScopesResult)
             RiotControl.trigger('identityserver-admin-scopes-get');
-
+            RiotControl.trigger('identityserver-admin-scopes-users-get',{userId:q.id});
             RiotControl.trigger('aspnet_roles_fetch');
             RiotControl.trigger('aspnet_user_by_id', { id: q.id });
             RiotControl.trigger('identityserver-admin-users-get', { userId: q.id });
@@ -163,21 +193,27 @@ import RiotControl from 'riotcontrol';
             $('select').material_select();
         });
 
-        self.onScopesResult =  function(result) {
+
+        self.onUserScopeResult = (result) => {
+            console.log('onUserScopeResult',result)
+            self.userScopes = result;
+            $('.collapsible').collapsible({
+                accordion : false // A setting that changes the collapsible behavior to expandable instead of the default accordion style
+            });
+            self.calcIsAddScopeAllowed();
+            self.hasUserScopes = self.userScopes.length>0;
+            self.update();
+        }
+        self.onScopesResult = (result) => {
             console.log('onScopesResult',result)
             self.scopes = result;
+            self.calcIsAddScopeAllowed();
             self.update();
         }
 
         self.onIdentityServerScopesUsersGetResult= (query,data) =>{
             console.log('identityserver-admin-scopes-users-get-result',query,data)
             self.allowedUserScopes = data;
-            self.update();
-        }
-
-        self.onIdentityServerScopeGetResult= (query,data) =>{
-            console.log('identityserver-admin-scopes-get-result',query,data)
-            self.systemScopes = data;
             self.update();
         }
 
@@ -198,8 +234,21 @@ import RiotControl from 'riotcontrol';
             console.log('onRoleRemoveConfirmation',e.target.dataset.message,self.inPlayItem)
         }
 
-        self.onRemoveRole = (e) =>{
+        self.onRemoveUserScope = (e) =>{
+            console.log('onRemoveRole',e,e.target.dataset.message)
+            RiotControl.trigger('identityserver-admin-scopes-users-delete',
+                    { userId: self.result.User.Id,name: e.target.dataset.message});
+            self.collapseAll();
+        }
+        self.onAddScope = (e) =>{
+            console.log(e)
+            console.log('onAddScope',e.target.value)
+            RiotControl.trigger('identityserver-admin-scopes-users-create',
+                    { userId: self.result.User.Id,scopes: [e.target.value]});
+            self.collapseAll();
+        }
 
+        self.onRemoveRole = (e) =>{
             console.log('onRemoveRole',e,e.target.dataset.message)
             RiotControl.trigger('aspnet_user_role_remove', { id: self.result.User.Id,role: e.target.dataset.message});
             self.collapseAll();
@@ -210,6 +259,30 @@ import RiotControl from 'riotcontrol';
             console.log('onAddRole',e.target.value)
             RiotControl.trigger('aspnet_user_roles_add', { id: self.result.User.Id,role: e.target.value});
             self.collapseAll();
+        }
+
+        self.calcIsAddScopeAllowed = () =>{
+
+            self.is_add_scope_allowed = false
+            if(self.scopes && self.userScopes){
+                self.availableScopes = self.scopes.filter(
+                                (item)=>{
+                                var result = self.userScopes.filter(function( name ) {
+                                    return name == item.Name;
+                                });
+
+                    return result.length == 0;
+                });
+                self.is_add_scope_allowed = self.availableScopes.length > 0;
+
+                self.update();
+
+                $('#selectScope').val("1");
+
+                $('select').material_select();
+                $('#scopePickerContainer').on('change', 'select',self.onAddScope);
+                console.log('is_add_scope_allowed',self.is_add_scope_allowed,self.availableScopes )
+            }
         }
 
         self.calcIsAddRoleAllowed = () =>{
@@ -224,7 +297,7 @@ import RiotControl from 'riotcontrol';
                             return result.length == 0;
                         });
                 self.is_add_role_allowed = self.availableRoles.length > 0;
-                var tt = self.availableRoles;
+
                 self.update();
 
                 $('#selectRole').val("1");
@@ -268,7 +341,7 @@ import RiotControl from 'riotcontrol';
             }
 
             self.calcIsAddRoleAllowed();
-
+            self.hasRoles = self.result.Roles.length > 0;
             var result = self.result.Roles.filter(function( name ) {
                 return name == "Developer";
             });
@@ -289,6 +362,9 @@ import RiotControl from 'riotcontrol';
             {evt:'identityserver-admin-users-get-result', handler:self.onIdentityServerUserGetResult},
             {evt:'identityserver-admin-scopes-get-result', handler:self.onIdentityServerScopeGetResult},
             {evt:'identityserver-admin-scopes-users-get-result', handler:self.onIdentityServerScopesUsersGetResult},
+            {evt:'identityserver-admin-scopes-get-result', handler:self.onScopesResult},
+            {evt:'identityserver-admin-scopes-users-get-result', handler:self.onUserScopeResult},
+
         ]
     </script>
 </aspnet-user-detail>

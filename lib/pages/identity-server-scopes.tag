@@ -14,32 +14,26 @@ import RiotControl from 'riotcontrol';
             </div>
         </li>
 
-
-
-        <li >
-
+        <li>
             <form  class="col s12">
-
-            <div class="row">
-                <div class="input-field col s0">
-                    <a id="addScopeButton"
-                       disabled={ !isScopeAddable }
-                       onclick={onAddScope}
-                       class="btn-floating btn-medium waves-effect waves-light "><i class="material-icons">add</i></a>
+                <div class="row">
+                    <div class="input-field col s0">
+                        <a id="addScopeButton"
+                           disabled={ !isScopeAddable }
+                           onclick={onAddScope}
+                           class="btn-floating btn-medium waves-effect waves-light "><i class="material-icons">add</i></a>
+                    </div>
+                    <div class="input-field col s10">
+                        <input
+                                type="text" class="validate"
+                                 oninput = { onScopeInputChange }
+                                 onchange = { onScopeInputChange }
+                                 onkeypress = { onKeyPress }
+                                 name='r' >
+                        <label>Add a new Scope.</label>
+                    </div>
                 </div>
-                <div class="input-field col s10">
-                    <input
-                            type="text" class="validate"
-                             oninput = { onScopeInputChange }
-                             onchange = { onScopeInputChange }
-                             onkeypress = { onKeyPress }
-                             name='r' >
-                    <label>Add a new Scope.</label>
-                </div>
-            </div>
-
-        </form>
-
+            </form>
         </li>
     </ul>
 
@@ -50,23 +44,33 @@ import RiotControl from 'riotcontrol';
         self.isScopeAddable = false;
         self.lastScope = null;
 
-
         self.onScopesResult =  function(result) {
             console.log('onScopesResult',result)
             self.scopes = result;
             self.update();
         }
 
-        self.on('unmount', function() {
-            RiotControl.off('identityserver-admin-scopes-get-result', self.onScopesResult)
+        self.on('before-mount', function() {
+            console.log('on before-mount: aspnet-user-detail');
+            for (var i = 0, len = self.riotControlMap.length; i < len; i++) {
+                console.log(self.riotControlMap[i])
+
+                RiotControl.on(self.riotControlMap[i].evt, self.riotControlMap[i].handler);
+            }
         });
 
-        self.on('mount', function() {
+        self.on('unmount', function() {
+            for (var i = 0, len = self.riotControlMap.length; i < len; i++) {
+                RiotControl.off(self.riotControlMap[i].evt, self.riotControlMap[i].handler);
+            }
+        });
+
+        self.on('mount', () =>{
             console.log('mount',this)
             $('.collapsible').collapsible({
                 accordion : false // A setting that changes the collapsible behavior to expandable instead of the default accordion style
             });
-            RiotControl.on('identityserver-admin-scopes-get-result', self.onScopesResult)
+
             RiotControl.trigger('identityserver-admin-scopes-get');
             self.calcOnScopeAddable();
         });
@@ -77,7 +81,7 @@ import RiotControl from 'riotcontrol';
             self.collapseAll();
         }
 
-        self.onAddScope = function() {
+        self.onAddScope = () => {
             if(self.isScopeAddable == true){
                 console.log('onAddScope',self.lastScope)
                 RiotControl.trigger('identityserver-admin-scopes-create',{
@@ -90,7 +94,8 @@ import RiotControl from 'riotcontrol';
                 self.calcOnScopeAddable();
             }
         }
-        self.calcOnScopeAddable = ()=>{
+
+        self.calcOnScopeAddable = () => {
             if(self.lastScope && self.lastScope.length > 1){
                 self.isScopeAddable =  true;
                 self.addScopeCallback = self.onAddScope;
@@ -99,7 +104,7 @@ import RiotControl from 'riotcontrol';
                 self.addScopeCallback = null;
             }
         }
-        self.onScopeInputChange = function(e) {
+        self.onScopeInputChange = (e) =>{
             console.log('onScopeInputChange',self.r,self.r.value);
             var roleTerm = self.r.value
             self.lastScope = roleTerm
@@ -108,7 +113,7 @@ import RiotControl from 'riotcontrol';
             console.log(self.isScopeAddable)
         }
 
-        self.onKeyPress = function(e) {
+        self.onKeyPress = (e) =>{
             if(!e)
                 e=window.event;
             var keyCode = e.keyCode || e.which;
@@ -130,5 +135,8 @@ import RiotControl from 'riotcontrol';
             $(".collapsible").collapsible({accordion: true});
             $(".collapsible").collapsible({accordion: false});
         }
+        self.riotControlMap = [
+            {evt:'identityserver-admin-scopes-get-result', handler:self.onScopesResult},
+        ]
     </script>
 </identity-server-scopes>
