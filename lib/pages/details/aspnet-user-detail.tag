@@ -86,10 +86,12 @@ import RiotControl from 'riotcontrol';
 
     </div>
     <div if={hasDeveloperRole}  class="s12 l9 col">
+        <h5>Identity Server Settings</h5>
+        <br>
         <table class="highlight">
             <thead>
             <tr>
-                <th><h5>IdentityServer</h5></th>
+                <th><h5>Scopes</h5></th>
             </tr>
             </thead>
         </table>
