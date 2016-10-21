@@ -121,7 +121,7 @@ import './components/simple-table.tag';
 
         self.on('mount', function() {
             // the "href" attribute of .modal-trigger must specify the modal ID that wants to be triggered
-            $('.modal-trigger').leanModal();
+      //      $('.modal-trigger').leanModal();
 
             Sortable.create(self.roleA, {
                 group: {
