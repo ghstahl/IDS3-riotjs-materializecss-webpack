@@ -1,7 +1,11 @@
 
 import Sortable from '../js/Sortable.min.js';
+import './components/simple-table.tag';
 
 <drag-drop2>
+    <simple-table title={stTitle}
+        cols={stCols}
+        rows={stRows}></simple-table>
 
         <ul class="collection" id="roleA">
             <li each={_itemsRoleA} data-role="{name}" class="collection-item">
@@ -14,6 +18,11 @@ import Sortable from '../js/Sortable.min.js';
             </li>
         </ul>
         <ul class="collection" id="roleFinal">
+            <li>
+                <p>Drag stuff to....
+                    Here!
+                </p>
+            </li>
             <li each={_itemsRoleFinal} class="collection-item avatar">
 
                 <img src="images/graduation.png" alt="" class="circle">
@@ -21,9 +30,10 @@ import Sortable from '../js/Sortable.min.js';
                 <p>First Line <br>
                     Second Line
                 </p>
-                <a href="#!" class="secondary-content"><i class="material-icons">grade</i></a>
-            </li>
 
+                <a onclick={onRemoveItem}  class="waves-effect secondary-content waves-light "><i class="material-icons">remove</i>
+                Remove</a>
+            </li>
         </ul>
 
         <button class="btn waves-effect waves-light" onclick="{updateRoles}"  >Submit</button>
@@ -45,7 +55,6 @@ import Sortable from '../js/Sortable.min.js';
     <style >
 
 
-
     .sortable-ghost {
         opacity: .3;
         background: #f60;
@@ -61,6 +70,10 @@ import Sortable from '../js/Sortable.min.js';
     <script>
         var self = this
 
+        self.stCols = ["hi"]
+        self.stTitle ="My Title"
+        self.stRows = [[]]
+
         self.updateRoles = () =>{
 
             console.log(self.roleFinal)
@@ -70,7 +83,7 @@ import Sortable from '../js/Sortable.min.js';
 
         self._itemsRoleA = [
             { name: 'Administrator' },
-            { name: 'Developer' },
+            { name: 'Developer',herb:'dig' },
             { name: 'User' }
         ]
         self._itemsRoleB = [
@@ -81,6 +94,9 @@ import Sortable from '../js/Sortable.min.js';
         self._itemsRoleFinal = [
             { name: 'Administrator' }
         ]
+        self.stRows =  self._itemsRoleFinal.map(function(item) {
+            return ['scope',item.name];
+        });
 
         self.emptyUL = (ul) => {
 
@@ -90,6 +106,19 @@ import Sortable from '../js/Sortable.min.js';
                 lis = ul.getElementsByTagName("li");
             }
         }
+        self.onRemoveItem = (e) =>{
+
+            console.log('onRemoveRole',e,e.item)
+            var result = self._itemsRoleFinal.filter(function( item ) {
+                return item.name != e.item.name;
+            });
+            self._itemsRoleFinal = result;
+            self.stRows =  self._itemsRoleFinal.map(function(item) {
+                return ['scope',item.name];
+            });
+            self.update()
+        }
+
         self.on('mount', function() {
             // the "href" attribute of .modal-trigger must specify the modal ID that wants to be triggered
             $('.modal-trigger').leanModal();
@@ -142,9 +171,15 @@ import Sortable from '../js/Sortable.min.js';
                     self._itemsRoleFinal = [];
                     self.update();
                     self._itemsRoleFinal = temp;
+
+
+                    self.stRows =  self._itemsRoleFinal.map(function(item) {
+                        return ['scope',item.name];
+                    });
                     self.update();
                 }
             });
         })
     </script>
 </drag-drop2>
+
