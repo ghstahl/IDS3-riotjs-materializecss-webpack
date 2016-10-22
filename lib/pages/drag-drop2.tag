@@ -6,35 +6,53 @@ import './components/simple-table.tag';
     <simple-table title={stTitle}
         cols={stCols}
         rows={stRows}></simple-table>
+        <div class="secion">
+            <div class="row">
+                <form class="col s12" >
+                    <div class="row">
+                        <div class="input-field col s6">
+                            <ul class="collection" id="roleA">
+                                <li each={_itemsRoleA} data-role="{name}" class="collection-item">
+                                    {name}
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="input-field col s6">
+                            <ul class="collection" id="roleB">
+                                <li each={_itemsRoleB} data-role="{name}" class="collection-item">
+                                    {name}
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="row">
+                <form class="col s12" >
+                    <ul class="collection" id="roleFinal">
+                        <li>
+                            <p>Drag stuff to....
+                                Here!
+                            </p>
+                        </li>
+                        <li each={_itemsRoleFinal} class="collection-item avatar">
 
-        <ul class="collection" id="roleA">
-            <li each={_itemsRoleA} data-role="{name}" class="collection-item">
-                 {name}
-            </li>
-        </ul>
-        <ul class="collection" id="roleB">
-            <li each={_itemsRoleB} data-role="{name}" class="collection-item">
-                {name}
-            </li>
-        </ul>
-        <ul class="collection" id="roleFinal">
-            <li>
-                <p>Drag stuff to....
-                    Here!
-                </p>
-            </li>
-            <li each={_itemsRoleFinal} class="collection-item avatar">
+                            <img src="images/graduation.png" alt="" class="circle">
+                            <span class="title">{name}</span>
+                            <p>First Line <br>
+                                Second Line
+                            </p>
 
-                <img src="images/graduation.png" alt="" class="circle">
-                <span class="title">{name}</span>
-                <p>First Line <br>
-                    Second Line
-                </p>
+                            <a onclick={onRemoveItem}  class="waves-effect secondary-content waves-light "><i class="material-icons">remove</i>
+                                Remove</a>
+                        </li>
+                    </ul>
+                </form>
+            </div>
+        </div>
 
-                <a onclick={onRemoveItem}  class="waves-effect secondary-content waves-light "><i class="material-icons">remove</i>
-                Remove</a>
-            </li>
-        </ul>
+
+
 
         <button class="btn waves-effect waves-light" onclick="{updateRoles}"  >Submit</button>
 
