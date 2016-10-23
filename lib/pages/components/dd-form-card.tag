@@ -149,9 +149,7 @@ import Sortable from '../../js/Sortable.min.js';
                     self.triggerEvent(opts.name+'-target-changed',[]);
                 }
             });
-
         })
-
 
     </script>
 </dd-form-card>

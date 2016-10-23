@@ -162,18 +162,11 @@ import './components/dd-form-card.tag'
             self.update()
         }
 
-        self.observable.on('assign-scopes-target-changed',function(){
+        self.onAssignScopesTargetChanged = () =>{
             console.log('assign-scopes-target-changed',self.dragTarget)
-        })
+        }
 
         self.on('mount', function() {
-            // the "href" attribute of .modal-trigger must specify the modal ID that wants to be triggered
-      //      $('.modal-trigger').leanModal();
-
-            /////////////////////////////////////////////////////////////////
-            /////////////////////////////////////////////////////////////////
-            /////////////////////////////////////////////////////////////////
-
             Sortable.create(self.roleA, {
                 group: {
                     name: 'roles',
@@ -231,6 +224,11 @@ import './components/dd-form-card.tag'
                 }
             });
         })
+
+        self.registerObserverableEventHandler(
+                'assign-scopes-target-changed',
+                self.onAssignScopesTargetChanged)
+
     </script>
 </drag-drop2>
 
