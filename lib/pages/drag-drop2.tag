@@ -1,6 +1,7 @@
 
 import Sortable from '../js/Sortable.min.js';
 import './components/simple-table.tag';
+import './components/dd-form-card.tag'
 
 <drag-drop2>
     <simple-table title={stTitle}
@@ -53,50 +54,9 @@ import './components/simple-table.tag';
             </div>
         </div>
 
+    <dd-form-card name="assign-scopes" drag-target={dragTarget} drag-source={dragSource} ></dd-form-card>
 
-    <div class="secion">
-        <div class="row">
-            <form class="col s12" >
-                <div class="row">
-                    <div class="input-field col s6">
-                        <ul class="collection with-header" id="assignedScopeDragTarget">
-                            <div class="collection-header">
-                                <h4>Assigned Scopes</h4>
-                                <span>Drag granted scopes here...</span>
-                                <span><i class="material-icons secondary-content">arrow_downward</i></span>
-                            </div>
-
-                            <li each={_itemsAssignedScopes}
-                                data-item={name}
-                                class="collection-item">
-                                <span><i class="material-icons">assignment_turned_in</i></span>
-                                <span>{name}</span>
-                                <a onclick={onRemoveScopeItem}
-                                   class="waves-effect secondary-content">
-                                    Remove</a>
-                            </li>
-                        </ul>
-                    </div>
-
-                    <div class="input-field col s6">
-                        <ul class="collection with-header" id="grantedScopeDragSource">
-                            <div class="collection-header">
-                                <h4>Granted Scopes</h4>
-                                Drag granted scopes from here...
-                            </div>
-                            <li each={_itemsGrantedScopes} data-item="{name}" class="collection-item">
-                                <span class="my-handle"><i class="material-icons">assignment_return</i></span>
-                                <span>{name}</span>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </form>
-        </div>
-    </div>
-
-
-        <button class="btn waves-effect waves-light" onclick="{updateRoles}"  >Submit</button>
+    <button class="btn waves-effect waves-light" onclick="{updateRoles}"  >Submit</button>
 
 
     <!-- Modal Structure -->
@@ -112,30 +72,21 @@ import './components/simple-table.tag';
     <a href="#modal1" data-toggle="modal" class=" modal-trigger waves-effect waves-light blue accent-2 white-text btn">Add Comment</a>
     <!-- Modal Trigger -->
     <button data-target="modal1" class="btn waves-effect waves-light modal-trigger">Modal</button>
+
     <style scoped>
+        .sortable-ghost {
+            opacity: .3;
+            background: #f60;
+        }
+        #roleA,#roleB,#roleFinal {
+            border: 2px dashed #f60;
+            min-height: 100px
+        }
+    </style>
 
-
-    .sortable-ghost {
-        opacity: .3;
-        background: #f60;
-    }
-    .my-handle {
-        cursor: move;
-        cursor: -webkit-grabbing;
-    }
-    .ignore-elements{}
-    #assignedScopeDragTarget  {
-        min-height: 150px
-    }
-
-    #roleA,#roleB,#roleFinal {
-        border: 2px dashed #f60;
-        min-height: 100px
-    }
-
-</style>
     <script>
         var self = this
+        self.mixin("shared-observable-mixin");
 
         self.hasAssignedScopes = false
         self.stCols = ["hi"]
@@ -154,6 +105,21 @@ import './components/simple-table.tag';
             { name: 'api1' },
             { name: 'geo_location' }
         ]
+        self.dragSource = {
+            title:"Granted Scopes",
+            titleSecondary:"Drag granted scopes from here...",
+            data:[
+                { name: 'offline_access' },
+                { name: 'api1' },
+                { name: 'geo_location' }
+            ]
+        }
+        self.dragTarget= {
+            title:"Assigned Scopes",
+            titleSecondary:"Drag granted scopes here...",
+            data:[],
+        }
+
         self._itemsAssignedScopes = [
         ]
         self._itemsRoleA = [
@@ -182,23 +148,7 @@ import './components/simple-table.tag';
             }
         }
 
-        self.emptyUL2 = (ul) => {
 
-            var lis = ul.getElementsByTagName("li");
-            for(var i = lis.length; i--;){
-                if(lis[i].attributes["do-not-remove"]  == undefined){
-                    ul.removeChild(lis[i]);
-                }
-            }
-        }
-        self.onRemoveScopeItem = (e) =>{
-            console.log('onRemoveScopeItem',e.item.name)
-            var result = self._itemsAssignedScopes.filter(function( item ) {
-                return item.name != e.item.name;
-            });
-            self._itemsAssignedScopes = result;
-            self.update()
-        }
         self.onRemoveItem = (e) =>{
 
             console.log('onRemoveRole',e,e.item)
@@ -212,66 +162,14 @@ import './components/simple-table.tag';
             self.update()
         }
 
+        self.observable.on('assign-scopes-target-changed',function(){
+            console.log('assign-scopes-target-changed',self.dragTarget)
+        })
+
         self.on('mount', function() {
             // the "href" attribute of .modal-trigger must specify the modal ID that wants to be triggered
       //      $('.modal-trigger').leanModal();
 
-            Sortable.create(self.grantedScopeDragSource, {
-//                handle: ".my-handle",
-                filter: ".ignore-elements",
-                group: {
-                    name: 'scopes',
-                    pull: 'clone',
-                    put: false
-                },
-                sort:false
-            });
-
-            Sortable.create(self.assignedScopeDragTarget, {
-                filter: ".ignore-elements",
-                group: {
-                    name: 'scopes',
-                    pull: false
-                },
-                sort:false,
-
-                // Element dragging started
-                onStart: function (/**Event*/evt) {
-                    console.log('onStart',evt);
-                },
-                onMove: function (evt) {
-                    console.log('onMove',evt);
-                },
-                onFilter: function (/**Event*/evt) {
-                    console.log('onFilter',evt);
-                },
-                // Called by any change to the list (add / update / remove)
-                onSort: function (/**Event*/evt) {
-                    console.log('onSort',evt);
-                    // same properties as onUpdate
-                },
-
-                onAdd: function (evt) {
-                    var el = evt.item;
-                    var newItem = evt.item.attributes["data-item"].value;
-                    console.log(newItem);
-
-                    // is it in our backing array
-                    var item = self._itemsAssignedScopes.find(x => x.name === newItem);
-                    if (item) {
-                        console.log("This item already exists");
-                    }
-                    else {
-                        self._itemsAssignedScopes.push({ name: newItem });
-                    }
-                    self.emptyUL2(self.assignedScopeDragTarget);
-                    var temp = self._itemsAssignedScopes;
-                    self._itemsAssignedScopes = [];
-                    self.update();
-                    self._itemsAssignedScopes = temp;
-                     self.update();
-                }
-            });
             /////////////////////////////////////////////////////////////////
             /////////////////////////////////////////////////////////////////
             /////////////////////////////////////////////////////////////////
