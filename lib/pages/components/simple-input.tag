@@ -6,28 +6,36 @@
             oninput = { onRChange }
             onchange = { onRChange }
             onkeypress = { onKeyPress }
-            name='r' >
+            name='r'
+    ><span if={!_isValid } class="badge">{lengthCounter} more required</span>
     <label>{opts.label}</label>
 
-    <style>
 
-    </style>
     <script>
         /*
          <simple-input
-            value={myStringValue}
-            min-length=4
-            label="My Label"
+         value={myStringValue}
+         min-length=4
+         label="My Label"
          ></simple-input>
          */
         var self = this;
         self.mixin("opts-mixin");
         self.mixin("shared-observable-mixin");
+
+        self.showBadge = true;
+        self.lengthCounter = opts.minLength;
         self._isValid = false;
 
-        self.validateInput = (force) =>{
+        self.onStateInit = (state) =>{
+            opts.state = state
+            self.r.value = opts.state.value
+            self.validateInput(true)
+            self.update()
+        }
 
-            var temp = opts.value.length>= opts.minLength
+        self.validateInput = (force) =>{
+            var temp = opts.state.value.length>= opts.minLength
             if(temp != self._isValid){
                 self._isValid = temp
                 force = true;
@@ -35,11 +43,13 @@
             if(force){
                 self.triggerEvent(opts.name+'-valid',[self._isValid]);
             }
+            self.lengthCounter = opts.minLength - opts.state.value.length
         }
+
 
         self.onRChange = function(e) {
             var rValue = self.r.value
-            opts.value = rValue
+            opts.state.value = rValue
             self.validateInput(false);
         }
 
@@ -57,8 +67,10 @@
                 return true;
             }
         }
-        self.on('mount',function(){
-            self.validateInput(true)
-        })
+
+        // place mixins here that require stuff to already exist.
+        self.mixin("state-init-mixin");
     </script>
+
 </simple-input>
+

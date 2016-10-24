@@ -5,56 +5,56 @@ import './components/dd-form-card.tag'
 import './components/consolidated-form-test.tag'
 <drag-drop2>
     <simple-table title={stTitle}
-        cols={stCols}
-        rows={stRows}></simple-table>
-        <div class="secion">
-            <div class="row">
-                <form class="col s12" >
-                    <div class="row">
-                        <div class="input-field col s6">
-                            <ul class="collection" id="roleA">
-                                <li each={_itemsRoleA} data-role="{name}" class="collection-item">
-                                    {name}
-                                </li>
-                            </ul>
-                        </div>
-                        <div class="input-field col s6">
-                            <ul class="collection" id="roleB">
-                                <li each={_itemsRoleB} data-role="{name}" class="collection-item">
-                                    {name}
-                                </li>
-                            </ul>
-                        </div>
+                  cols={stCols}
+                  rows={stRows}></simple-table>
+    <div class="secion">
+        <div class="row">
+            <form class="col s12" >
+                <div class="row">
+                    <div class="input-field col s6">
+                        <ul class="collection" id="roleA">
+                            <li each={_itemsRoleA} data-role="{name}" class="collection-item">
+                                {name}
+                            </li>
+                        </ul>
                     </div>
-                </form>
-            </div>
-            <div class="row">
-                <form class="col s12" >
-                    <ul class="collection" id="roleFinal">
-                        <li>
-                            <p>Drag stuff to....
-                                Here!
-                            </p>
-                        </li>
-                        <li each={_itemsRoleFinal} class="collection-item avatar">
-
-                            <img src="images/graduation.png" alt="" class="circle">
-                            <span class="title">{name}</span>
-                            <p>First Line <br>
-                                Second Line
-                            </p>
-
-                            <a onclick={onRemoveItem}
-                               class="waves-effect secondary-content waves-light ">
-                                <i class="material-icons">remove</i>
-                                Remove</a>
-                        </li>
-                    </ul>
-                </form>
-            </div>
+                    <div class="input-field col s6">
+                        <ul class="collection" id="roleB">
+                            <li each={_itemsRoleB} data-role="{name}" class="collection-item">
+                                {name}
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </form>
         </div>
+        <div class="row">
+            <form class="col s12" >
+                <ul class="collection" id="roleFinal">
+                    <li>
+                        <p>Drag stuff to....
+                            Here!
+                        </p>
+                    </li>
+                    <li each={_itemsRoleFinal} class="collection-item avatar">
 
-    <consolidated-form-test></consolidated-form-test>
+                        <img src="images/graduation.png" alt="" class="circle">
+                        <span class="title">{name}</span>
+                        <p>First Line <br>
+                            Second Line
+                        </p>
+
+                        <a onclick={onRemoveItem}
+                           class="waves-effect secondary-content waves-light ">
+                            <i class="material-icons">remove</i>
+                            Remove</a>
+                    </li>
+                </ul>
+            </form>
+        </div>
+    </div>
+
+    <consolidated-form-test name="cft"></consolidated-form-test>
     <dd-form-card name="assign-scopes" drag-target={dragTarget} drag-source={dragSource} ></dd-form-card>
 
     <button class="btn waves-effect waves-light" onclick="{updateRoles}"  >Submit</button>
@@ -94,8 +94,12 @@ import './components/consolidated-form-test.tag'
         self.stTitle ="My Title"
         self.stRows = [[]]
 
-        self.updateRoles = () =>{
+        self.cftState = {
+            friendlyName:"Some Friendly Name",
+            scopes:[]
+        }
 
+        self.updateRoles = () =>{
             console.log(self.roleFinal)
         }
 
@@ -106,20 +110,8 @@ import './components/consolidated-form-test.tag'
             { name: 'api1' },
             { name: 'geo_location' }
         ]
-        self.dragSource = {
-            title:"Granted Scopes",
-            titleSecondary:"Drag granted scopes from here...",
-            data:[
-                { name: 'offline_access' },
-                { name: 'api1' },
-                { name: 'geo_location' }
-            ]
-        }
-        self.dragTarget= {
-            title:"Assigned Scopes",
-            titleSecondary:"Drag granted scopes here...",
-            data:[],
-        }
+        self.dragSource = {}
+        self.dragTarget= {}
 
         self._itemsAssignedScopes = [
         ]
@@ -140,8 +132,33 @@ import './components/consolidated-form-test.tag'
             return ['scope',item.name];
         });
 
-        self.emptyUL = (ul) => {
+        self.initCFTState = () => {
+            var cftState = {
+                friendlyName:"Some Friendly Name",
+                scopes:[]
+            }
+            self.cftState = cftState;
+        }
+        self.initializeCFTValues = () =>{
+            var  dragSource = {
+                title:"Granted Scopes",
+                titleSecondary:"Drag granted scopes from here...",
+                data:[
+                    { name: 'offline_access' },
+                    { name: 'api1' },
+                    { name: 'geo_location' }
+                ]
+            }
+            var  dragTarget = {
+                title:"Assigned Scopes",
+                titleSecondary:"Drag granted scopes here...",
+                data:[],
+            }
 
+            self.dragSource = dragSource;
+            self.dragTarget = dragTarget;
+        }
+        self.emptyUL = (ul) => {
             var lis = ul.getElementsByTagName("li");
             while(lis.length> 0){
                 ul.removeChild(lis[0]);
@@ -166,8 +183,21 @@ import './components/consolidated-form-test.tag'
         self.onAssignScopesTargetChanged = () =>{
             console.log('assign-scopes-target-changed',self.dragTarget)
         }
+        self.onCFTSubmit = (state) =>{
+            console.log('onCFTSubmit',state)
+            self.initCFTState()
+            self.triggerEvent('cft-state-init',[self.cftState]);
+        }
+
+        self.on('before-mount', function() {
+            self.initializeCFTValues()
+            self.initCFTState()
+        })
 
         self.on('mount', function() {
+            self.initCFTState()
+            self.triggerEvent('cft-state-init',[self.cftState]);
+
             Sortable.create(self.roleA, {
                 group: {
                     name: 'roles',
@@ -224,11 +254,16 @@ import './components/consolidated-form-test.tag'
                     self.update();
                 }
             });
+            self.update();
         })
 
         self.registerObserverableEventHandler(
                 'assign-scopes-target-changed',
                 self.onAssignScopesTargetChanged)
+        self.registerObserverableEventHandler(
+                'cft-submit',
+                self.onCFTSubmit)
+
 
     </script>
 </drag-drop2>

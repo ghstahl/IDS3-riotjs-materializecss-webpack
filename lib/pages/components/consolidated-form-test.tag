@@ -3,23 +3,37 @@ import './simple-input.tag'
 import './simple-select.tag'
 <consolidated-form-test>
 
-    <form class="col s12" >
-        <div class="row">
-            <div class="input-field col s6">
-                <simple-input
-                        name="friendly-name"
-                        value={myStringValue}
-                        min-length=4
-                        label="Friendly Client Name"
+    <form>
+        <div class="card">
+            <div class="card-content">
+                <span class="card-title">My Consolidated Form</span>
+                <div class="row">
+                    <div class="input-field col s6">
+                        <simple-input
+                                state={friendlyNameState}
+                                name="friendly-name"
+                                min-length=4
+                                label="Friendly Client Name"
+                        ></simple-input>
+                    </div>
+                    <div class="input-field col s6">
 
-                ></simple-input>
+                    </div>
+                </div>
+                <dd-form-card name={ddSeedName} ></dd-form-card>
             </div>
-            <div class="input-field col s6">
-
+            <div class="card-action">
+                <a class="waves-effect waves-light btn"
+                   disabled={ !isFormValid }
+                   onclick={onSubmit}
+                >
+                    Sumbit
+                </a>
+                <a class="waves-effect waves-light btn">Cancel</a>
             </div>
         </div>
     </form>
-    <dd-form-card name={ddSeedName} drag-target={dragTarget} drag-source={dragSource} ></dd-form-card>
+
 
     <style></style>
     <script>
@@ -28,6 +42,9 @@ import './simple-select.tag'
         self.mixin("opts-mixin");
         self.mixin("shared-observable-mixin");
 
+        self.friendlyNameState = {value:''}
+        self.isFormValid = false;
+        self.validFriendlyName = false;
         self.ddSeedName = "cft-assign-scopes";
         self.ddChangedEvt = self.ddSeedName+"-target-changed";
         self.flowType = null
@@ -36,7 +53,7 @@ import './simple-select.tag'
             {name:'Client Credentials'},
         ]
 
-        self.myStringValue = ""
+
         self.dragSource = {
             title:"Granted Scopes",
             titleSecondary:"Drag granted scopes from here...",
@@ -46,17 +63,53 @@ import './simple-select.tag'
                 { name: 'geo_location' }
             ]
         }
-        self.dragTarget= {
+        self.dragTarget = {
             title:"Assigned Scopes",
             titleSecondary:"Drag granted scopes here...",
             data:[],
         }
+
+        self.onStateInit = (state) =>{
+            self.state = state;
+            self.dragTarget.data = state.scopes;
+            self.triggerEvent(self.ddSeedName + '-state-init',[
+                    {
+                        dragTarget:self.dragTarget,
+                        dragSource:self.dragSource,
+                    }
+            ]);
+            var state = {value:self.state.friendlyName}
+            self.triggerEvent('friendly-name-state-init',[state]);
+        }
+        self.onSubmit = function() {
+            if(self.isFormValid == true){
+                console.log('onSubmit',self.lastRole)
+
+                var state = {
+                    friendlyName:self.friendlyNameState.value,
+                    scopes:self.dragTarget.data
+                }
+                self.triggerEvent(opts.name+'-submit',[state]);
+            }
+        }
+
+        self.doValidationCheck = () =>{
+            self.isFormValid = self.validFriendlyName &&
+                    self.dragTarget.data.length > 0;
+            self.update()
+        }
+
         self.onAssignScopesTargetChanged = () =>{
             console.log(self.ddChangedEvt,self.dragTarget)
+            self.doValidationCheck()
         }
+
         self.onFriendlyNameValid = (valid) =>{
-            console.log('friendly-name-valid',self.myStringValue,valid)
+            console.log('friendly-name-valid',self.friendlyNameState,valid)
+            self.validFriendlyName = valid;
+            self.doValidationCheck()
         }
+
         self.onFlowTypeChanged = () =>{
             console.log('flow-type-changed',self.flowType)
         }
@@ -67,11 +120,13 @@ import './simple-select.tag'
         self.registerObserverableEventHandler(
                 'friendly-name-valid',
                 self.onFriendlyNameValid)
+
         self.registerObserverableEventHandler(
                 'flow-type-changed',
                 self.onFlowTypeChanged)
 
 
-
+        // place mixins here that require stuff to already exist.
+        self.mixin("state-init-mixin");
     </script>
 </consolidated-form-test>
