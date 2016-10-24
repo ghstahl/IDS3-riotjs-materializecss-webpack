@@ -2,7 +2,7 @@
 import Sortable from '../js/Sortable.min.js';
 import './components/simple-table.tag';
 import './components/dd-form-card.tag'
-
+import './components/consolidated-form-test.tag'
 <drag-drop2>
     <simple-table title={stTitle}
         cols={stCols}
@@ -54,6 +54,7 @@ import './components/dd-form-card.tag'
             </div>
         </div>
 
+    <consolidated-form-test></consolidated-form-test>
     <dd-form-card name="assign-scopes" drag-target={dragTarget} drag-source={dragSource} ></dd-form-card>
 
     <button class="btn waves-effect waves-light" onclick="{updateRoles}"  >Submit</button>
