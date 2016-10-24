@@ -19,6 +19,8 @@
         self.onSelectChanged = (e) =>{
             console.log(e)
             console.log('onSelectChanged',e.target.value)
+            opts.state.selected = e.target.value;
+            self.triggerEvent(opts.name+'-changed',[opts.state]);
         }
 
         this.on('mount', function() {
@@ -27,6 +29,13 @@
             $('#rolePickerContainer').on('change', 'select',self.onSelectChanged);
 
         })
+
+        self.onStateInit = (state) =>{
+            opts.state = state
+            self.update()
+        }
+        // place mixins here that require stuff to already exist.
+        self.mixin("state-init-mixin");
     </script>
 </simple-select>
 

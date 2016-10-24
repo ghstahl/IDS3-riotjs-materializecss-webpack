@@ -8,7 +8,7 @@ import Sortable from '../../js/Sortable.min.js';
                 <div class="collection-header">
                     <h4>{state.dragTarget.title}</h4>
                     <span>{state.dragTarget.titleSecondary}</span>
-                    <span><i class="material-icons secondary-content">arrow_downward</i></span>
+                    <span><i class="material-icons secondary-content">system_update_alt</i></span>
                 </div>
 
                 <li each={state.dragTarget.data}

@@ -55,7 +55,6 @@ import './components/consolidated-form-test.tag'
     </div>
 
     <consolidated-form-test name="cft"></consolidated-form-test>
-    <dd-form-card name="assign-scopes" drag-target={dragTarget} drag-source={dragSource} ></dd-form-card>
 
     <button class="btn waves-effect waves-light" onclick="{updateRoles}"  >Submit</button>
 
@@ -85,6 +84,7 @@ import './components/consolidated-form-test.tag'
         }
     </style>
 
+
     <script>
         var self = this
         self.mixin("shared-observable-mixin");
@@ -110,8 +110,7 @@ import './components/consolidated-form-test.tag'
             { name: 'api1' },
             { name: 'geo_location' }
         ]
-        self.dragSource = {}
-        self.dragTarget= {}
+
 
         self._itemsAssignedScopes = [
         ]
@@ -139,25 +138,7 @@ import './components/consolidated-form-test.tag'
             }
             self.cftState = cftState;
         }
-        self.initializeCFTValues = () =>{
-            var  dragSource = {
-                title:"Granted Scopes",
-                titleSecondary:"Drag granted scopes from here...",
-                data:[
-                    { name: 'offline_access' },
-                    { name: 'api1' },
-                    { name: 'geo_location' }
-                ]
-            }
-            var  dragTarget = {
-                title:"Assigned Scopes",
-                titleSecondary:"Drag granted scopes here...",
-                data:[],
-            }
 
-            self.dragSource = dragSource;
-            self.dragTarget = dragTarget;
-        }
         self.emptyUL = (ul) => {
             var lis = ul.getElementsByTagName("li");
             while(lis.length> 0){
@@ -165,7 +146,6 @@ import './components/consolidated-form-test.tag'
                 lis = ul.getElementsByTagName("li");
             }
         }
-
 
         self.onRemoveItem = (e) =>{
 
@@ -180,9 +160,6 @@ import './components/consolidated-form-test.tag'
             self.update()
         }
 
-        self.onAssignScopesTargetChanged = () =>{
-            console.log('assign-scopes-target-changed',self.dragTarget)
-        }
         self.onCFTSubmit = (state) =>{
             console.log('onCFTSubmit',state)
             self.initCFTState()
@@ -190,7 +167,6 @@ import './components/consolidated-form-test.tag'
         }
 
         self.on('before-mount', function() {
-            self.initializeCFTValues()
             self.initCFTState()
         })
 
@@ -258,12 +234,8 @@ import './components/consolidated-form-test.tag'
         })
 
         self.registerObserverableEventHandler(
-                'assign-scopes-target-changed',
-                self.onAssignScopesTargetChanged)
-        self.registerObserverableEventHandler(
                 'cft-submit',
                 self.onCFTSubmit)
-
 
     </script>
 </drag-drop2>
