@@ -1,8 +1,7 @@
-import $ from 'jquery';
 import Sortable from '../js/Sortable.min.js';
 import './components/simple-table.tag';
-import './components/dd-form-card.tag'
 import './components/consolidated-form-test.tag'
+
 <drag-drop2>
     <simple-table title={stTitle}
                   cols={stCols}
@@ -94,7 +93,6 @@ import './components/consolidated-form-test.tag'
         self.hasAssignedScopes = false
         self.stCols = ["hi"]
         self.stTitle ="My Title"
-        self.stRows = [[]]
 
         self.cftState = {
             friendlyName:"Some Friendly Name",
@@ -241,6 +239,7 @@ import './components/consolidated-form-test.tag'
                 dismissible: false
             })
         }
+
         self.onAgree = () =>{
             console.log('onAgree');
             $("#modal1").closeModal()
@@ -251,5 +250,4 @@ import './components/consolidated-form-test.tag'
     </script>
 
 </drag-drop2>
-
 
