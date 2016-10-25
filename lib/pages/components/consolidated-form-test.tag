@@ -36,7 +36,6 @@ import './simple-select.tag'
                 >
                     Sumbit
                 </a>
-                <a class="waves-effect waves-light btn">Cancel</a>
             </div>
         </div>
     </form>
