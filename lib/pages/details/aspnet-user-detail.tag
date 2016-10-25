@@ -49,7 +49,6 @@ import RiotControl from 'riotcontrol';
                         <div class="collapsible-body">
                             <p>
                                 <a onclick={ onRemoveRole }
-                                   data-message={name}
                                    class="waves-effect waves-light red btn">Remove</a>
                             </p>
 
@@ -65,8 +64,7 @@ import RiotControl from 'riotcontrol';
                         <select id="selectRole">
                             <option value="-1" disabled selected>Add New Role...</option>
                             <option  each="{availableRoles}" value="{Name}"
-                                     onChange={this.onAddRole}
-                                     data-message={Name}>{Name}</option>
+                                     onChange={this.onAddRole}>{Name}</option>
                         </select>
 
                     </div>
@@ -119,8 +117,7 @@ import RiotControl from 'riotcontrol';
                         <select id="selectScope">
                             <option value="-1" disabled selected>Add New Scope...</option>
                             <option  each="{availableScopes}" value="{Name}"
-                                     onChange={this.onAddScope}
-                                     data-message={Name}>{Name}</option>
+                                     onChange={this.onAddScope}>{Name}</option>
                         </select>
                     </div>
                 </div>
@@ -235,7 +232,7 @@ import RiotControl from 'riotcontrol';
         }
 
         self.onRemoveUserScope = (e) =>{
-            console.log('onRemoveRole',e,e.target.dataset.message)
+            console.log('onRemoveUserScope',e,e.target.dataset.message)
             RiotControl.trigger('identityserver-admin-scopes-users-delete',
                     { userId: self.result.User.Id,name: e.item.name});
             self.collapseAll();
@@ -250,10 +247,9 @@ import RiotControl from 'riotcontrol';
 
         self.onRemoveRole = (e) =>{
             console.log('onRemoveRole',e,e.target.dataset.message)
-            RiotControl.trigger('aspnet_user_role_remove', { id: self.result.User.Id,role: e.target.dataset.message});
+            RiotControl.trigger('aspnet_user_role_remove', { id: self.result.User.Id,role: e.item.name});
             self.collapseAll();
         }
-
         self.onAddRole = (e) =>{
             console.log(e)
             console.log('onAddRole',e.target.value)
