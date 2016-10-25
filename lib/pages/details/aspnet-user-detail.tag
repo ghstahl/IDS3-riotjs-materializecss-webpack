@@ -237,7 +237,7 @@ import RiotControl from 'riotcontrol';
         self.onRemoveUserScope = (e) =>{
             console.log('onRemoveRole',e,e.target.dataset.message)
             RiotControl.trigger('identityserver-admin-scopes-users-delete',
-                    { userId: self.result.User.Id,name: e.target.dataset.message});
+                    { userId: self.result.User.Id,name: e.item.name});
             self.collapseAll();
         }
         self.onAddScope = (e) =>{
