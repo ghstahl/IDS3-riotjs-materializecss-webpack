@@ -70,7 +70,8 @@ import './components/consolidated-form-test.tag'
             <p>A bunch of text</p>
         </div>
         <div class="modal-footer">
-            <a onclick={onAgree} class=" modal-action modal-close waves-effect waves-green btn-flat">Agree</a>
+            <a class=" modal-action modal-close waves-effect waves-green btn-flat">Cancel</a>
+            <a onclick={onAgree} class=" modal-action waves-effect waves-green btn-flat">Agree</a>
         </div>
     </div>
 
@@ -199,6 +200,7 @@ import './components/consolidated-form-test.tag'
                     self.inPlayItem = newItem;
                 }
             });
+
             Sortable.create(self.roleFinal, {
                 group: {
                     name: 'roles',
@@ -233,21 +235,21 @@ import './components/consolidated-form-test.tag'
             });
             self.update();
         })
-
         self.onEULA = () =>{
-            console.log($)
-            console.log($("#modal1"))
-            $("#modal1").openModal();
+            console.log('onEULA')
+            $("#modal1").openModal({
+                dismissible: false
+            })
         }
-
         self.onAgree = () =>{
-            var dd = $("#modal1");
-            dd.closeModal();
+            console.log('onAgree');
+            $("#modal1").closeModal()
         }
         self.registerObserverableEventHandler(
                 'cft-submit',
                 self.onCFTSubmit)
-
     </script>
+
 </drag-drop2>
+
 
