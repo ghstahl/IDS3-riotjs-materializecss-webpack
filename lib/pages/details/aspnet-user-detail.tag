@@ -82,7 +82,7 @@ import RiotControl from 'riotcontrol';
     <div if={hasDeveloperRole}>
         <h5>Identity Server Settings</h5>
         <div if={!isUserEnrolledInIdentityServer}>
-            <a class="waves-effect waves-light btn">Enroll</a>
+            <a onclick={onIdentityServerUserEnroll} class="waves-effect waves-light btn">Enroll</a>
         </div>
     </div>
 
@@ -182,24 +182,33 @@ import RiotControl from 'riotcontrol';
             var q = riot.route.query();
             console.log('on mount: aspnet-user-detail',q);
             RiotControl.trigger('identityserver-admin-scopes-get');
-            RiotControl.trigger('identityserver-admin-scopes-users-get',{userId:q.id});
+            RiotControl.trigger('identityserver-admin-users-get', { userId: q.id });
             RiotControl.trigger('aspnet_roles_fetch');
             RiotControl.trigger('aspnet_user_by_id', { id: q.id });
-            RiotControl.trigger('identityserver-admin-users-get', { userId: q.id });
+
 
             $('select').material_select();
         });
 
+        self.onIdentityServerUserEnrollAck = (result) =>{
+            console.log('onIdentityServerUserEnrollAck',result)
+            RiotControl.trigger('identityserver-admin-users-get', { userId: self.result.User.Id });
+        }
+
+        self.onIdentityServerUserEnroll = (e) =>{
+            console.log('onIdentityServerUserEnroll',e)
+            RiotControl.trigger('identityserver-admin-users-create', { userId: self.result.User.Id});
+        }
 
         self.onUserScopeResult = (result) => {
             console.log('onUserScopeResult',result)
             self.userScopes = result;
-            $('.collapsible').collapsible({
-                accordion : false // A setting that changes the collapsible behavior to expandable instead of the default accordion style
-            });
             self.calcIsAddScopeAllowed();
             self.hasUserScopes = self.userScopes.length>0;
             self.update();
+            $('.collapsible').collapsible({
+                accordion : false // A setting that changes the collapsible behavior to expandable instead of the default accordion style
+            });
         }
         self.onScopesResult = (result) => {
             console.log('onScopesResult',result)
@@ -207,7 +216,6 @@ import RiotControl from 'riotcontrol';
             self.calcIsAddScopeAllowed();
             self.update();
         }
-
         self.onIdentityServerScopesUsersGetResult= (query,data) =>{
             console.log('identityserver-admin-scopes-users-get-result',query,data)
             self.allowedUserScopes = data;
@@ -226,20 +234,17 @@ import RiotControl from 'riotcontrol';
         }
 
         self.onRoleRemoveConfirmation = (e) =>{
-
-            console.log(e)
-            console.log('onRoleRemoveConfirmation',e.target.dataset.message,self.inPlayItem)
+            console.log('onRoleRemoveConfirmation',e,e.target.dataset.message,self.inPlayItem)
         }
 
         self.onRemoveUserScope = (e) =>{
-            console.log('onRemoveUserScope',e,e.target.dataset.message)
+            console.log('onRemoveUserScope',e,e.item.name)
             RiotControl.trigger('identityserver-admin-scopes-users-delete',
                     { userId: self.result.User.Id,name: e.item.name});
             self.collapseAll();
         }
         self.onAddScope = (e) =>{
-            console.log(e)
-            console.log('onAddScope',e.target.value)
+            console.log('onAddScope',e,e.target.value)
             RiotControl.trigger('identityserver-admin-scopes-users-create',
                     { userId: self.result.User.Id,scopes: [e.target.value]});
             self.collapseAll();
@@ -251,14 +256,12 @@ import RiotControl from 'riotcontrol';
             self.collapseAll();
         }
         self.onAddRole = (e) =>{
-            console.log(e)
-            console.log('onAddRole',e.target.value)
+            console.log('onAddRole',e,e.target.value)
             RiotControl.trigger('aspnet_user_roles_add', { id: self.result.User.Id,role: e.target.value});
             self.collapseAll();
         }
 
         self.calcIsAddScopeAllowed = () =>{
-
             self.is_add_scope_allowed = false
             if(self.scopes && self.userScopes){
                 self.availableScopes = self.scopes.filter(
@@ -360,14 +363,10 @@ import RiotControl from 'riotcontrol';
             {evt:'identityserver-admin-scopes-users-get-result', handler:self.onIdentityServerScopesUsersGetResult},
             {evt:'identityserver-admin-scopes-get-result', handler:self.onScopesResult},
             {evt:'identityserver-admin-scopes-users-get-result', handler:self.onUserScopeResult},
-
+            {evt:'identityserver-admin-users-create-ack', handler:self.onIdentityServerUserEnrollAck},
         ]
+
     </script>
 </aspnet-user-detail>
-
-
-
-
-
 
 
