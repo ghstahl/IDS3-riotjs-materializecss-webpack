@@ -1,4 +1,4 @@
-
+import $ from 'jquery';
 import Sortable from '../js/Sortable.min.js';
 import './components/simple-table.tag';
 import './components/dd-form-card.tag'
@@ -60,18 +60,19 @@ import './components/consolidated-form-test.tag'
 
 
     <!-- Modal Structure -->
+    <!-- Modal Trigger -->
+    <a class="waves-effect waves-light btn modal-trigger" onclick={onEULA}>EULA</a>
+
+    <!-- Modal Structure -->
     <div id="modal1" class="modal">
         <div class="modal-content">
             <h4>Modal Header</h4>
             <p>A bunch of text</p>
         </div>
         <div class="modal-footer">
-            <a href="#!" class=" modal-action modal-close waves-effect waves-green btn-flat">Agree</a>
+            <a onclick={onAgree} class=" modal-action modal-close waves-effect waves-green btn-flat">Agree</a>
         </div>
     </div>
-    <a href="#modal1" data-toggle="modal" class=" modal-trigger waves-effect waves-light blue accent-2 white-text btn">Add Comment</a>
-    <!-- Modal Trigger -->
-    <button data-target="modal1" class="btn waves-effect waves-light modal-trigger">Modal</button>
 
     <style scoped>
         .sortable-ghost {
@@ -233,6 +234,16 @@ import './components/consolidated-form-test.tag'
             self.update();
         })
 
+        self.onEULA = () =>{
+            console.log($)
+            console.log($("#modal1"))
+            $("#modal1").openModal();
+        }
+
+        self.onAgree = () =>{
+            var dd = $("#modal1");
+            dd.closeModal();
+        }
         self.registerObserverableEventHandler(
                 'cft-submit',
                 self.onCFTSubmit)
