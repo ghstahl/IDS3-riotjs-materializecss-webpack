@@ -13,7 +13,7 @@ import Sortable from '../js/Sortable.min.js';
     </tr>
     </thead>
     <tbody>
-    <tr each={ this.results.Users }>
+    <tr each={ this.results.Records }>
 
       <td>{ UserName }</td>
       <td>{ Email }</td>
@@ -47,14 +47,12 @@ import Sortable from '../js/Sortable.min.js';
     this.on('mount', function() {
       var self = this;
       RiotControl.on('aspnet_users_page_changed', function(result) {
-        console.log('aspnet_users_page_changed');
         self.results = result;
-        console.log(self.results);
+        console.log('aspnet_users_page_changed:',self.results);
         self.update();
       });
       RiotControl.trigger('aspnet_users_page',{Page:9,PagingState:null});
     });
-
     /**
      * Search callback
      */
