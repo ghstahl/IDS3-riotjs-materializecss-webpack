@@ -43,7 +43,6 @@ import './simple-select.tag'
 
     <style></style>
     <script>
-
         var self = this;
         self.mixin("opts-mixin");
         self.mixin("shared-observable-mixin");
@@ -61,30 +60,28 @@ import './simple-select.tag'
             {name:'Client Credentials'},
         ]
 
-
-        self.dragSource = {
-            title:"Granted Scopes",
-            titleSecondary:"Drag granted scopes from here...",
-            data:[
-                { name: 'offline_access' },
-                { name: 'api1' },
-                { name: 'geo_location' }
-            ]
-        }
-        self.dragTarget = {
-            title:"Assigned Scopes",
-            titleSecondary:"Drag granted scopes here...",
-            data:[],
+        self.ddState =  {
+            dragTarget:{
+                title:"Assigned Scopes",
+                titleSecondary:"Drag granted scopes here...",
+                data:[],
+            },
+            dragSource:{
+                title:"Granted Scopes",
+                titleSecondary:"Drag granted scopes from here...",
+                data:[
+                    { name: 'offline_access' },
+                    { name: 'api1' },
+                    { name: 'geo_location' }
+                ]
+            },
         }
 
         self.onStateInit = (state) =>{
             self.state = state;
-            self.dragTarget.data = state.scopes;
+            self.ddState.dragTarget.data = state.scopes;
             self.triggerEvent(self.ddSeedName + '-state-init',[
-                    {
-                        dragTarget:self.dragTarget,
-                        dragSource:self.dragSource,
-                    }
+                self.ddState
             ]);
             self.friendlyNameState = {value:self.state.friendlyName}
             self.triggerEvent('friendly-name-state-init',[self.friendlyNameState]);
@@ -96,7 +93,7 @@ import './simple-select.tag'
 
                 var state = {
                     friendlyName:self.friendlyNameState.value,
-                    scopes:self.dragTarget.data,
+                    scopes:self.ddState.dragTarget.data,
                     flowType:self.flowState.selected
                 }
                 self.triggerEvent(opts.name+'-submit',[state]);
@@ -104,14 +101,15 @@ import './simple-select.tag'
         }
 
         self.doValidationCheck = () =>{
-            self.isFormValid =  self.validFriendlyName &&
-                                self.dragTarget.data.length > 0 &&
-                                self.flowState.selected !== undefined;
+            self.isFormValid =
+                    self.validFriendlyName &&
+                    self.ddState.dragTarget.data.length > 0 &&
+                    self.flowState.selected !== undefined;
             self.update()
         }
 
         self.onAssignScopesTargetChanged = () =>{
-            console.log(self.ddChangedEvt,self.dragTarget)
+            console.log(self.ddChangedEvt,self.ddState.dragTarget)
             self.doValidationCheck()
         }
 
