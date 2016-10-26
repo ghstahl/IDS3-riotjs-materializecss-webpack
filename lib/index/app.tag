@@ -47,10 +47,10 @@ import RiotControl from 'riotcontrol';
             {name:'Drag&Drop2',href:'#drag-drop2',view : 'drag-drop2'},
             {name:'Movie Drag Drop',href:'#movie-drag-drop',view : 'movie-drag-drop'},
             {name:'roles',href:'#roles',view : 'roles'},
-            {name:'Client Credentials',href:'#client-credentials',view : 'client-credentials'}
+            {name:'Client Credentials',href:'#client-credentials',view : 'client-credentials'},
+            {name:'Modal Fun',href:'#modal-fun',view : 'modal-fun'},
 
         ]
     </script>
 
 </app>
-

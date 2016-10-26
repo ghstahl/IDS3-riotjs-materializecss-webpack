@@ -54,7 +54,7 @@ import './components/consolidated-form-inner.tag'
             </form>
         </div>
     </div>
-    
+
     <consolidated-form-wrapper card-title="Wrapped Consolidated Form">
         <yield to="content">
             <consolidated-form-inner name="cft" state={parent.cftInnerState}></consolidated-form-inner>
