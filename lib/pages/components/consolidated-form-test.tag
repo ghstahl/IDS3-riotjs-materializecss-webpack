@@ -1,9 +1,10 @@
+import './consolidated-form-inner.tag'
+
 import './dd-form-card.tag'
 import './simple-input.tag'
 import './simple-select.tag'
 
 <consolidated-form-test>
-
     <form>
         <div class="card">
             <div class="card-content">
@@ -30,6 +31,9 @@ import './simple-select.tag'
                 <dd-form-card name={ddSeedName} ></dd-form-card>
             </div>
             <div class="card-action">
+                <div class="progress">
+                    <div class="determinate" style="width: {validProgress}%"></div>
+                </div>
                 <a class="waves-effect waves-light btn"
                    disabled={ !isFormValid }
                    onclick={onSubmit}
@@ -39,7 +43,6 @@ import './simple-select.tag'
             </div>
         </div>
     </form>
-
 
     <style></style>
     <script>
@@ -51,6 +54,7 @@ import './simple-select.tag'
         self.flowState = {}
 
         self.isFormValid = false;
+        self.validProgress = 0;
         self.validFriendlyName = false;
         self.ddSeedName = "cft-assign-scopes";
         self.ddChangedEvt = self.ddSeedName+"-target-changed";
@@ -100,11 +104,21 @@ import './simple-select.tag'
             }
         }
 
-        self.doValidationCheck = () =>{
+        self.doValidationCheck = () =>
+        {
             self.isFormValid =
                     self.validFriendlyName &&
                     self.ddState.dragTarget.data.length > 0 &&
                     self.flowState.selected !== undefined;
+            if (self.isFormValid) {
+                self.validProgress = 100
+            } else {
+                var percent = 0;
+                percent += self.validFriendlyName ? 33 : 0;
+                percent += (self.ddState.dragTarget.data.length > 0) ? 33 : 0;
+                percent += (self.flowState.selected !== undefined ) ? 33 : 0;
+                self.validProgress = percent;
+            }
             self.update()
         }
 
@@ -140,4 +154,3 @@ import './simple-select.tag'
         self.mixin("state-init-mixin");
     </script>
 </consolidated-form-test>
-
