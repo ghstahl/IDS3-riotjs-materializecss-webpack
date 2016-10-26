@@ -86,8 +86,8 @@ import './simple-select.tag'
                         dragSource:self.dragSource,
                     }
             ]);
-            var state = {value:self.state.friendlyName}
-            self.triggerEvent('friendly-name-state-init',[state]);
+            self.friendlyNameState = {value:self.state.friendlyName}
+            self.triggerEvent('friendly-name-state-init',[self.friendlyNameState]);
         }
 
         self.onSubmit = function() {

@@ -27,29 +27,30 @@
         self.lengthCounter = opts.minLength;
         self._isValid = false;
 
-        self.onStateInit = (state) =>{
-            opts.state = state
-            self.r.value = opts.state.value
+        self.onStateInit = (state) =>
+        {
+            self.opts.state = state
+            console.log('simple-input', 'onStateInit', state, opts.state)
+            self.r.value = self.opts.state.value
             self.validateInput(true)
             self.update()
         }
 
         self.validateInput = (force) =>{
-            var temp = opts.state.value.length>= opts.minLength
+            var temp = self.opts.state.value.length>= self.opts.minLength
             if(temp != self._isValid){
                 self._isValid = temp
                 force = true;
             }
             if(force){
-                self.triggerEvent(opts.name+'-valid',[self._isValid]);
+                self.triggerEvent(self.opts.name+'-valid',[self._isValid]);
             }
-            self.lengthCounter = opts.minLength - opts.state.value.length
+            self.lengthCounter = self.opts.minLength - self.opts.state.value.length
         }
-
-
+        
         self.onRChange = function(e) {
             var rValue = self.r.value
-            opts.state.value = rValue
+            self.opts.state.value = rValue
             self.validateInput(false);
         }
 
