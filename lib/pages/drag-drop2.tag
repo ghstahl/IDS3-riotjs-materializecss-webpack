@@ -1,6 +1,8 @@
 import Sortable from '../js/Sortable.min.js';
 import './components/simple-table.tag';
 import './components/consolidated-form-test.tag'
+import './components/consolidated-form-wrapper.tag'
+import './components/consolidated-form-inner.tag'
 
 <drag-drop2>
     <simple-table title={stTitle}
@@ -52,14 +54,21 @@ import './components/consolidated-form-test.tag'
             </form>
         </div>
     </div>
+    
+    <consolidated-form-wrapper card-title="Wrapped Consolidated Form">
+        <yield to="content">
+            <consolidated-form-inner name="cft" state={parent.cftInnerState}></consolidated-form-inner>
+        </yield>
+        <yield to="action">
+            <a class="waves-effect waves-light btn"
+               disabled={parent.formDisabled}
+               onclick={parent.onSubmit}
+            >
+                Submit
+            </a>
+        </yield>
+    </consolidated-form-wrapper>
 
-    <consolidated-form-test name="cft"></consolidated-form-test>
-
-    <button class="btn waves-effect waves-light" onclick="{updateRoles}"  >Submit</button>
-
-
-    <!-- Modal Structure -->
-    <!-- Modal Trigger -->
     <a class="waves-effect waves-light btn modal-trigger" onclick={onEULA}>EULA</a>
 
     <!-- Modal Structure -->
@@ -98,7 +107,8 @@ import './components/consolidated-form-test.tag'
             friendlyName:"Some Friendly Name",
             scopes:[]
         }
-
+        self.cftInnerState = {}
+        self.formDisabled = false;
         self.updateRoles = () =>{
             console.log(self.roleFinal)
         }
@@ -233,6 +243,21 @@ import './components/consolidated-form-test.tag'
             });
             self.update();
         })
+
+        self.onSubmit = function() {
+            if(self.formDisabled == false){
+                console.log('onSubmit',self.cftInnerState)
+                self.initCFTState()
+                self.triggerEvent('cft-state-init',[self.cftState]);
+                // send to the store from here.
+            }
+        }
+
+        self.onCFTValid = (valid) =>{
+            console.log('cft-valid',self.cftInnerState,valid)
+            self.formDisabled = !valid;
+            self.update()
+        }
         self.onEULA = () =>{
             console.log('onEULA')
             $("#modal1").openModal({
@@ -247,6 +272,11 @@ import './components/consolidated-form-test.tag'
         self.registerObserverableEventHandler(
                 'cft-submit',
                 self.onCFTSubmit)
+        self.registerObserverableEventHandler(
+                'cft-valid',
+                self.onCFTValid)
+
+
     </script>
 
 </drag-drop2>

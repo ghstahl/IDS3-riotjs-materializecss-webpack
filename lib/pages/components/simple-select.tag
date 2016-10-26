@@ -1,5 +1,5 @@
 <simple-select>
-    <div id="rolePickerContainer">
+    <div id={rolePickerContainerId}>
         <i if={opts.materialIcon} class="material-icons prefix">{opts.materialIcon}</i>
         <select id="selectFlow">
             <option  value="-1" disabled selected>{opts.prompt}</option>
@@ -16,6 +16,7 @@
         self.mixin("opts-mixin");
         self.mixin("shared-observable-mixin");
 
+        self.rolePickerContainerId = opts.name + '-rpcid'
         self.onSelectChanged = (e) =>{
             console.log(e)
             console.log('onSelectChanged',e.target.value)
@@ -24,10 +25,9 @@
         }
 
         this.on('mount', function() {
-            $('#selectRole').val("1");
             $('select').material_select();
-            $('#rolePickerContainer').on('change', 'select',self.onSelectChanged);
-
+            var id = '#' + self.rolePickerContainerId;
+            $(id).on('change', 'select',self.onSelectChanged);
         })
 
         self.onStateInit = (state) =>{
@@ -38,4 +38,3 @@
         self.mixin("state-init-mixin");
     </script>
 </simple-select>
-
