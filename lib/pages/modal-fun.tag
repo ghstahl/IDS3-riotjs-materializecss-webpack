@@ -34,13 +34,14 @@ import './components/consolidated-form-inner.tag'
 
 
         <div class="modal-footer">
-            <a class=" modal-action modal-close waves-effect waves-green btn-flat">Cancel</a>
-            <a onclick={onCFTSubmit}
+            <a class="modal-action modal-close waves-effect waves-green btn">Cancel</a>
+            <a
+
+                    onclick={onCFTSubmit}
                disabled={formDisabled}
-               class="modal-action waves-effect waves-green btn-flat">Submit</a>
+               class="waves-effect waves-green btn-flat" >Submit</a>
         </div>
     </div>
-
 
 
 
@@ -56,7 +57,7 @@ import './components/consolidated-form-inner.tag'
             scopes:[]
         }
         self.cftInnerState = {}
-        self.formDisabled = false;
+        self.formDisabled = true;
 
         self.on('mount',function(){
             self.initCFTState()
@@ -98,12 +99,14 @@ import './components/consolidated-form-inner.tag'
         }
         self.onCFTSubmit = (state) =>{
             console.log('onCFTSubmit',state)
-            self.output =  self.jsFriendlyJSONStringify(self.cftInnerState);
+            if(!self.formDisabled){
+                self.output =  self.jsFriendlyJSONStringify(self.cftInnerState);
 
-            self.initCFTState()
-            self.triggerEvent('cft-state-init',[self.cftState]);
-            self.update()
-            $("#modal2").closeModal()
+                self.initCFTState()
+                self.triggerEvent('cft-state-init',[self.cftState]);
+                self.update()
+                $("#modal2").closeModal()
+            }
         }
         self.registerObserverableEventHandler(
                 'cft-submit',

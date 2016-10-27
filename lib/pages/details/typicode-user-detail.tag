@@ -1,8 +1,9 @@
 import RiotControl from 'riotcontrol';
+import '../components/typicode-user-inner.tag';
 
 <typicode-user-detail>
-    <h4>{ result.name }</h4>
-
+    <h4>{ result.name }</h4><span> <a class="waves-effect waves-light btn"
+                                      onclick={onUserEdit}>Edit User</a></span>
     <div class="s12 l9 col">
         <table class="highlight">
             <thead>
@@ -84,13 +85,40 @@ import RiotControl from 'riotcontrol';
         </table>
     </div>
 
-<style>
+    <!-- Modal Structure -->
+    <div id="modalUserEdit" class="modal">
+        <div class="modal-content">
+            <div class="row">
+                <form class="col s12">
+                    <typicode-user-inner name="user-edit" state={userState}></typicode-user-inner>
+              </form>
+            </div>
+        </div>
+
+
+        <div class="modal-footer">
+            <a class="modal-action modal-close waves-effect waves-green btn">Cancel</a>
+            <span> </span>
+            <a
+
+                    onclick={onUserSubmit}
+                    disabled={formDisabled}
+                    class="waves-effect waves-green btn" >Submit</a>
+        </div>
+    </div>
+<style scoped>
     #aside {
              width:350px;
          }
+    .modal .modal-footer .btn, .modal .modal-footer .btn-large, .modal .modal-footer .btn-flat {
+        float: right;
+        margin: 6px 4px;
+    }
+    .modal { width: 75% !important ; max-height: 100% !important ; overflow-y: hidden !important ;}
 </style>
     <script>
         var self = this;
+        self.mixin("shared-observable-mixin");
 
         self.result = {};
         self.onUserChanged = (user) => {
@@ -98,6 +126,8 @@ import RiotControl from 'riotcontrol';
             console.log(self.result);
             self.update();
         }
+        self.userState = {}
+        self.formDisabled = true;
 
         self.on('unmount', function() {
             console.log('on unmount:');
@@ -115,6 +145,24 @@ import RiotControl from 'riotcontrol';
             });
             RiotControl.trigger('typicode_user_fetch', { id: q.id });
         });
+
+        self.onUserEdit = () =>{
+            console.log('onUserEdit')
+            self.userState = self.result
+            self.triggerEvent('user-edit-state-init',[self.userState]);
+            $("#modalUserEdit").openModal({
+                dismissible: false
+            })
+        }
+
+        self.onUserSubmit = () =>{
+            console.log('onUserSubmit');
+            if(!self.formDisabled){
+
+                $("#modalUserEdit").closeModal()
+            }
+        }
+
 
     </script>
 </typicode-user-detail>
