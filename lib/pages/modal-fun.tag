@@ -44,44 +44,26 @@ import './components/consolidated-form-inner.tag'
     </div>
 
     <div class="stepper">
-        <div class="step {stepSate.step1.active}">
+        <div each={key in stepSate} class="step {stepSate[key].active}">
+
             <div>
-                <div class="circle">1</div>
+                <a class="btn-floating btn-small waves-effect waves-light circle2">{stepSate[key].id}</a>
                 <div class="line"></div>
             </div>
             <div>
-                <div class="title">Title 123</div>
-                <div class="description">Description</div>
+                <div class="title">{stepSate[key].title}</div>
+                <div class="description">{stepSate[key].description}</div>
+                <div class="line-separator"></div>
                 <div class="body">
                     {output}
                 </div>
-                <a class="waves-effect waves-light btn"
-                   onclick={onOpenClose}>Agree/Diasagree</a>
-            </div>
-
-        </div>
-        <div class="step {stepSate.step2.active}">
-            <div>
-                <div class="circle">2</div>
-                <div class="line"></div>
-            </div>
-            <div>
-                <div class="title">Title 12345 1</div>
-                <div class="body">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</div>
-            </div>
-        </div>
-        <div class="step {stepSate.step3.active}">
-            <div>
-                <div class="circle">2</div>
-                <div class="line"></div>
-            </div>
-            <div>
-                <div class="title">Title 12345 1</div>
-                <div class="body">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</div>
+                <div class="action">
+                    <a class="waves-effect waves-light btn"
+                       onclick={stepContinue}>Continue:{id}</a>
+                </div>
             </div>
         </div>
     </div>
-
     <style scoped>
         .modal { width: 75% !important ; max-height: 100% !important ; overflow-y: hidden !important ;}
 
@@ -101,6 +83,11 @@ import './components/consolidated-form-inner.tag'
             padding-left: 16px;
             min-height: 24px;
         }
+        .stepper .circle2 {
+            color: white;
+            background: #4285f4;
+            text-align: center;
+        }
         .stepper .circle {
             background: #4285f4;
             width: 32px;
@@ -114,11 +101,12 @@ import './components/consolidated-form-inner.tag'
         .stepper .line {
             position: absolute;
             border-left: 1px solid gainsboro;
-            left: 40px;
+            left: 41px;
             bottom: -12px;
             top: 68px;
             z-index: 1;
         }
+
         .stepper .step:last-child .line {
             display: none !important;
         }
@@ -133,9 +121,10 @@ import './components/consolidated-form-inner.tag'
         .stepper .description {
             line-height: 0.1;
             font-size: 1em;
-            padding-bottom: 24px;
+            padding-bottom: 12px;
             color: #989898;
         }
+
         /** Horizontal **/
         .stepper.horizontal {
             line-height: 72px;
@@ -177,8 +166,26 @@ import './components/consolidated-form-inner.tag'
         .stepper .step.inactive .body{
             display: none;
         }
+        .stepper .step.inactive .action{
+            display: none;
+        }
+        .stepper .step .line-separator{
+            border-bottom:1px solid gainsboro;
+
+        }
+        .stepper .step .action{
+            border-top:1px solid gainsboro;
+            padding-top: 4px;
+        }
         .stepper .step.inactive .circle{
             background-color: #9e9e9e;
+        }
+        .stepper .step.inactive .circle2{
+            background-color: #9e9e9e;
+            pointer-events: none;
+        }
+        .stepper .step.toggleHidden .body{
+            display: none;
         }
 
     </style>
@@ -186,17 +193,28 @@ import './components/consolidated-form-inner.tag'
         var self = this
         self.mixin("shared-observable-mixin");
         self.stepSate = {
-            step1:{
-                active:""
+            step1: {
+                id:1,
+                title: 'step_1',
+                description:'description step_1',
+                active: ''
             },
-            step2:{
-                active:"inactive"
+            step2: {
+                id:2,
+                title: 'step_2',
+                description:'description step_2',
+                active: 'inactive'
             },
-            step3:{
-                active:""
+            step3: {
+                id:3,
+                title: 'step_3',
+                description:'description step_3',
+                active: 'inactive'
             },
-
         }
+
+
+
         self.cftState = {
             friendlyName:"Some Friendly Name",
             scopes:[]
@@ -221,12 +239,20 @@ import './components/consolidated-form-inner.tag'
                 dismissible: false
             })
         }
-        self.onAgree = () =>{
-            console.log('onAgree');
-            self.stepSate.step2.active=""
+
+        self.stepContinue = (e) =>{
+            console.log('stepContinue',e.item);
+            console.log(self.stepSate[e.item.key])
+            var current = self.stepSate[e.item.key]
+            var next = self.stepSate["step"+(current.id +1)]
+            next.active = ""
             $("#modal1").closeModal()
         }
+        self.onAgree = () =>{
+            console.log('onAgree');
 
+            $("#modal1").closeModal()
+        }
         self.onOpenClose2 = () =>{
             console.log('onEULA')
             $("#modal2").openModal({
