@@ -43,15 +43,160 @@ import './components/consolidated-form-inner.tag'
         </div>
     </div>
 
+    <div class="stepper">
+        <div class="step {stepSate.step1.active}">
+            <div>
+                <div class="circle">1</div>
+                <div class="line"></div>
+            </div>
+            <div>
+                <div class="title">Title 123</div>
+                <div class="description">Description</div>
+                <div class="body">
+                    {output}
+                </div>
+                <a class="waves-effect waves-light btn"
+                   onclick={onOpenClose}>Agree/Diasagree</a>
+            </div>
 
+        </div>
+        <div class="step {stepSate.step2.active}">
+            <div>
+                <div class="circle">2</div>
+                <div class="line"></div>
+            </div>
+            <div>
+                <div class="title">Title 12345 1</div>
+                <div class="body">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</div>
+            </div>
+        </div>
+        <div class="step {stepSate.step3.active}">
+            <div>
+                <div class="circle">2</div>
+                <div class="line"></div>
+            </div>
+            <div>
+                <div class="title">Title 12345 1</div>
+                <div class="body">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</div>
+            </div>
+        </div>
+    </div>
 
-    <style>
+    <style scoped>
         .modal { width: 75% !important ; max-height: 100% !important ; overflow-y: hidden !important ;}
+
+        .stepper .step {
+            position: relative;
+            min-height: 32px;
+            padding: 24px;
+        }
+        .stepper .step:hover {
+            background: #F6F6F6;
+        }
+        .stepper .step > div:first-child {
+            position: static; height: 0;
+        }
+        .stepper .step > div:last-child {
+            margin-left: 32px;
+            padding-left: 16px;
+            min-height: 24px;
+        }
+        .stepper .circle {
+            background: #4285f4;
+            width: 32px;
+            height: 32px;
+            line-height: 32px;
+            border-radius: 16px;
+            position: relative;
+            color: white;
+            text-align: center;
+        }
+        .stepper .line {
+            position: absolute;
+            border-left: 1px solid gainsboro;
+            left: 40px;
+            bottom: -12px;
+            top: 68px;
+            z-index: 1;
+        }
+        .stepper .step:last-child .line {
+            display: none !important;
+        }
+        .stepper .title {
+            line-height: 32px;
+            font-weight: 500;
+        }
+        .stepper .body {
+            padding-bottom: 28px;
+            padding-top: 8px;
+        }
+        .stepper .description {
+            line-height: 0.1;
+            font-size: 1em;
+            padding-bottom: 24px;
+            color: #989898;
+        }
+        /** Horizontal **/
+        .stepper.horizontal {
+            line-height: 72px;
+            position: relative;
+        }
+        .stepper.horizontal .step {
+            display: inline-block;
+        }
+        .stepper.horizontal .step .line, .stepper.horizontal .step .circle, .stepper.horizontal .step .title {
+            display: inline-block;
+        }
+        .stepper.horizontal .step .line {
+            border-left: 0px;
+            position: inherit;
+            border-top: 1px solid gainsboro;
+            width: 100px;
+            margin-bottom: 5px;
+            margin-left: 8px;
+            margin-right: 8px;
+        }
+        .stepper.horizontal .step .title {
+            margin-left: 8px;
+        }
+        .stepper.horizontal .step .body {
+            line-height: initial;
+        }
+        .stepper.horizontal .step > div:last-child {
+            position: absolute;
+            width: 90vw;
+            top: 93px;
+            margin-left: 0px;
+            padding-left: 0px;
+            margin: auto;
+        }
+        .stepper .step.inactive .title{
+            color: #C9C9C9;
+            font-weight: 400;
+        }
+        .stepper .step.inactive .body{
+            display: none;
+        }
+        .stepper .step.inactive .circle{
+            background-color: #9e9e9e;
+        }
+
     </style>
     <script>
         var self = this
         self.mixin("shared-observable-mixin");
+        self.stepSate = {
+            step1:{
+                active:""
+            },
+            step2:{
+                active:"inactive"
+            },
+            step3:{
+                active:""
+            },
 
+        }
         self.cftState = {
             friendlyName:"Some Friendly Name",
             scopes:[]
@@ -78,6 +223,7 @@ import './components/consolidated-form-inner.tag'
         }
         self.onAgree = () =>{
             console.log('onAgree');
+            self.stepSate.step2.active=""
             $("#modal1").closeModal()
         }
 
