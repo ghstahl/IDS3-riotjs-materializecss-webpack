@@ -57,7 +57,7 @@ import './components/consolidated-form-inner.tag'
                 <div class="body">
                     {output}
                 </div>
-                <div class="action">
+                <div class="footer">
                     <a class="waves-effect waves-light btn"
                        onclick={stepContinue}>Continue:{id}</a>
                 </div>
@@ -166,17 +166,23 @@ import './components/consolidated-form-inner.tag'
         .stepper .step.inactive .body{
             display: none;
         }
-        .stepper .step.inactive .action{
+        .stepper .step.inactive .footer{
             display: none;
         }
         .stepper .step .line-separator{
             border-bottom:1px solid gainsboro;
 
         }
-        .stepper .step .action{
+        .stepper .step .footer{
             border-top:1px solid gainsboro;
             padding-top: 4px;
         }
+        .stepper .step .footer .btn, .stepper .step .footer .btn-large, .stepper .step .footer .btn-flat {
+            float: right;
+            margin: 6px 0;
+        }
+
+
         .stepper .step.inactive .circle{
             background-color: #9e9e9e;
         }
