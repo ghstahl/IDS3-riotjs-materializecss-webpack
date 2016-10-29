@@ -1,4 +1,10 @@
+import RiotControl from 'riotcontrol';
 import './components/consolidated-form-inner.tag'
+import './components/stepper.tag'
+import './components/mcc1.tag'
+import './components/mcc2.tag'
+import './components/mcc3.tag'
+
 <modal-fun>
     <div class="section">
         <div class="container">
@@ -35,187 +41,54 @@ import './components/consolidated-form-inner.tag'
 
         <div class="modal-footer">
             <a class="modal-action modal-close waves-effect waves-green btn">Cancel</a>
-            <a
-
-                    onclick={onCFTSubmit}
+            <a onclick={onCFTSubmit}
                disabled={formDisabled}
                class="waves-effect waves-green btn-flat" >Submit</a>
         </div>
     </div>
 
-    <div class="stepper">
-        <div each={key in stepSate} class="step {stepSate[key].active}">
+    <stepper name="cc" state={ccStepperState}></stepper>
 
-            <div>
-                <a class="btn-floating btn-small waves-effect waves-light circle2">{stepSate[key].id}</a>
-                <div class="line"></div>
-            </div>
-            <div>
-                <div class="title">{stepSate[key].title}</div>
-                <div class="description">{stepSate[key].description}</div>
-                <div class="line-separator"></div>
-                <div class="body">
-                    {output}
-                </div>
-                <div class="footer">
-                    <a class="waves-effect waves-light btn"
-                       onclick={stepContinue}>Continue:{id}</a>
-                </div>
-            </div>
-        </div>
-    </div>
     <style scoped>
         .modal { width: 75% !important ; max-height: 100% !important ; overflow-y: hidden !important ;}
-
-        .stepper .step {
-            position: relative;
-            min-height: 32px;
-            padding: 24px;
-        }
-        .stepper .step:hover {
-            background: #F6F6F6;
-        }
-        .stepper .step > div:first-child {
-            position: static; height: 0;
-        }
-        .stepper .step > div:last-child {
-            margin-left: 32px;
-            padding-left: 16px;
-            min-height: 24px;
-        }
-        .stepper .circle2 {
-            color: white;
-            background: #4285f4;
-            text-align: center;
-        }
-        .stepper .circle {
-            background: #4285f4;
-            width: 32px;
-            height: 32px;
-            line-height: 32px;
-            border-radius: 16px;
-            position: relative;
-            color: white;
-            text-align: center;
-        }
-        .stepper .line {
-            position: absolute;
-            border-left: 1px solid gainsboro;
-            left: 41px;
-            bottom: -12px;
-            top: 68px;
-            z-index: 1;
-        }
-
-        .stepper .step:last-child .line {
-            display: none !important;
-        }
-        .stepper .title {
-            line-height: 32px;
-            font-weight: 500;
-        }
-        .stepper .body {
-            padding-bottom: 28px;
-            padding-top: 8px;
-        }
-        .stepper .description {
-            line-height: 0.1;
-            font-size: 1em;
-            padding-bottom: 12px;
-            color: #989898;
-        }
-
-        /** Horizontal **/
-        .stepper.horizontal {
-            line-height: 72px;
-            position: relative;
-        }
-        .stepper.horizontal .step {
-            display: inline-block;
-        }
-        .stepper.horizontal .step .line, .stepper.horizontal .step .circle, .stepper.horizontal .step .title {
-            display: inline-block;
-        }
-        .stepper.horizontal .step .line {
-            border-left: 0px;
-            position: inherit;
-            border-top: 1px solid gainsboro;
-            width: 100px;
-            margin-bottom: 5px;
-            margin-left: 8px;
-            margin-right: 8px;
-        }
-        .stepper.horizontal .step .title {
-            margin-left: 8px;
-        }
-        .stepper.horizontal .step .body {
-            line-height: initial;
-        }
-        .stepper.horizontal .step > div:last-child {
-            position: absolute;
-            width: 90vw;
-            top: 93px;
-            margin-left: 0px;
-            padding-left: 0px;
-            margin: auto;
-        }
-        .stepper .step.inactive .title{
-            color: #C9C9C9;
-            font-weight: 400;
-        }
-        .stepper .step.inactive .body{
-            display: none;
-        }
-        .stepper .step.inactive .footer{
-            display: none;
-        }
-        .stepper .step .line-separator{
-            border-bottom:1px solid gainsboro;
-
-        }
-        .stepper .step .footer{
-            border-top:1px solid gainsboro;
-            padding-top: 4px;
-        }
-        .stepper .step .footer .btn, .stepper .step .footer .btn-large, .stepper .step .footer .btn-flat {
-            float: right;
-            margin: 6px 0;
-        }
-
-
-        .stepper .step.inactive .circle{
-            background-color: #9e9e9e;
-        }
-        .stepper .step.inactive .circle2{
-            background-color: #9e9e9e;
-            pointer-events: none;
-        }
-        .stepper .step.toggleHidden .body{
-            display: none;
-        }
-
     </style>
     <script>
         var self = this
         self.mixin("shared-observable-mixin");
-        self.stepSate = {
+        self.mixin("riotcontrol-registration-mixin");
+
+        self.ccStepperState = {}
+
+        self.stepState = {
             step1: {
                 id:1,
-                title: 'step_1',
-                description:'description step_1',
-                active: ''
+                name:'mcc1',
+                tag:'mcc1',
+                title: 'Soogle Company End User License Agreement',
+                description:'Accept our EULA or we will Soogle you!',
+                active: '',
+                contentHide:'',
+                custom:{
+                    eula:"We are constantly changing and improving our Services. We may add or remove functionalities or features, and we may suspend or stop a Service altogether.\nYou can stop using our Services at any time, although we’ll be sorry to see you go. Google may also stop providing Services to you, or add or create new limits to our Services at any time.\nWe believe that you own your data and preserving your access to such data is important. If we discontinue a Service, where reasonably possible, we will give you reasonable advance notice and a chance to get information out of that Service.\n…you give Google a perpetual, irrevocable, worldwide, royalty-free, and non-exclusive license to reproduce, adapt, modify, translate, publish, publicly perform, publicly display and distribute any Content which you submit, post or display on or through, the Services."
+                }
             },
             step2: {
                 id:2,
+                name:'mcc2',
+                tag:'mcc2',
                 title: 'step_2',
                 description:'description step_2',
-                active: 'inactive'
+                active: 'inactive',
+                contentHide:'content-hide',
             },
             step3: {
                 id:3,
+                name:'mcc3',
+                tag:'mcc3',
                 title: 'step_3',
                 description:'description step_3',
-                active: 'inactive'
+                active: 'inactive',
+                contentHide:'content-hide',
             },
         }
 
@@ -228,10 +101,21 @@ import './components/consolidated-form-inner.tag'
         self.cftInnerState = {}
         self.formDisabled = true;
 
+        self.onEulaFetch = (result) =>{
+            console.log('eula-fetched',result)
+            self.stepState.step1.custom.eula = result
+            self.triggerEvent('mcc1-state-init',[self.ccStepperState.step1]);
+        }
+
         self.on('mount',function(){
             self.initCFTState()
+            var url = "https://raw.githubusercontent.com/ghstahl/IDS3-riotjs-materializecss-webpack/master/eula.md";
+            RiotControl.trigger('fetch-text',url,null,{name:'eula-fetched'});
             self.triggerEvent('cft-state-init',[self.cftState]);
+            self.ccStepperState = self.stepState;
+            self.triggerEvent('cc-state-init',[self.ccStepperState]);
         })
+
         self.initCFTState = () => {
             var cftState = {
                 friendlyName:"Some Friendly Name",
@@ -239,6 +123,7 @@ import './components/consolidated-form-inner.tag'
             }
             self.cftState = cftState;
         }
+
         self.onOpenClose = () =>{
             console.log('onEULA')
             $("#modal1").openModal({
@@ -246,19 +131,11 @@ import './components/consolidated-form-inner.tag'
             })
         }
 
-        self.stepContinue = (e) =>{
-            console.log('stepContinue',e.item);
-            console.log(self.stepSate[e.item.key])
-            var current = self.stepSate[e.item.key]
-            var next = self.stepSate["step"+(current.id +1)]
-            next.active = ""
-            $("#modal1").closeModal()
-        }
         self.onAgree = () =>{
             console.log('onAgree');
-
             $("#modal1").closeModal()
         }
+
         self.onOpenClose2 = () =>{
             console.log('onEULA')
             $("#modal2").openModal({
@@ -270,11 +147,13 @@ import './components/consolidated-form-inner.tag'
             console.log('onAgree');
             $("#modal2").closeModal()
         }
+
         self.onCFTValid = (valid) =>{
             console.log('cft-valid',self.cftInnerState,valid)
             self.formDisabled = !valid;
             self.update()
         }
+
         self.onCFTSubmit = (state) =>{
             console.log('onCFTSubmit',state)
             if(!self.formDisabled){
@@ -286,6 +165,16 @@ import './components/consolidated-form-inner.tag'
                 $("#modal2").closeModal()
             }
         }
+
+        self.onMccContinue = ( ) =>{
+            console.log('mcc1-continue')
+            self.triggerEvent('cc-next')
+        }
+
+        self.registerObserverableEventHandler(
+                'mcc1-continue',
+                self.onMccContinue)
+
         self.registerObserverableEventHandler(
                 'cft-submit',
                 self.onCFTSubmit)
@@ -293,11 +182,13 @@ import './components/consolidated-form-inner.tag'
         self.registerObserverableEventHandler(
                 'cft-valid',
                 self.onCFTValid)
+
         self.jsFriendlyJSONStringify = (s)=> {
             return JSON.stringify(s,null, ' ').
                     replace(/\u2028/g, '\\u2028').
                     replace(/\u2029/g, '\\u2029');
         }
+        self.riotControlRegisterEventHandler('eula-fetched',self.onEulaFetch)
 
     </script>
 
