@@ -40,7 +40,7 @@ These Terms of Service apply to the executable code version of Soogle Chrome. So
 
 4.4 You acknowledge and agree that if Soogle disables access to your account, you may be prevented from accessing the Services, your account details or any files or other content which is contained in your account.
 
-####5. Use of the Services by you
+#### 5. Use of the Services by you
 
 5.1 You agree to use the Services only for purposes that are permitted by (a) the Terms and (b) any applicable law, regulation or generally accepted practices or guidelines in the relevant jurisdictions (including any laws regarding the export of data or software to and from the United States or other relevant countries).
 
