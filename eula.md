@@ -1,10 +1,4 @@
-# H1
-## H2
-### H3
-#### H4
-##### H5
-###### H6
-##Soogle Chrome Terms of Service
+##### Soogle Chrome Terms of Service
 
 These Terms of Service apply to the executable code version of Soogle Chrome. Source code for Soogle Chrome is available free of charge under open source software license agreements at http://code.Soogle.com/chromium/terms.html.
 
