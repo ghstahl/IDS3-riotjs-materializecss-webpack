@@ -2,7 +2,7 @@
 
 These Terms of Service apply to the executable code version of Soogle Chrome. Source code for Soogle Chrome is available free of charge under open source software license agreements at http://code.Soogle.com/chromium/terms.html.
 
-#### 1. Your relationship with Soogle
+##### 1. Your relationship with Soogle
 
 1.1 Your use of Soogle’s products, software, services and web sites (referred to collectively as the “Services” in this document and excluding any services provided to you by Soogle under a separate written agreement) is subject to the terms of a legal agreement between you and Soogle. “Soogle” means Soogle Inc., whose principal place of business is at 1600 Amphitheatre Parkway, Mountain View, CA 94043, United States. This document explains how the agreement is made up, and sets out some of the terms of that agreement.
 
@@ -14,7 +14,7 @@ These Terms of Service apply to the executable code version of Soogle Chrome. So
 
 1.5 If there is any contradiction between what the Additional Terms say and what the Universal Terms say, then the Additional Terms shall take precedence in relation to that Service.
 
-#### 2. Accepting the Terms
+##### 2. Accepting the Terms
 
 2.1 In order to use the Services, you must first agree to the Terms. You may not use the Services if you do not accept the Terms.
 
@@ -24,13 +24,13 @@ These Terms of Service apply to the executable code version of Soogle Chrome. So
 
 (B) by actually using the Services. In this case, you understand and agree that Soogle will treat your use of the Services as acceptance of the Terms from that point onwards.
 
-#### 3. Language of the Terms
+##### 3. Language of the Terms
 
 3.1 Where Soogle has provided you with a translation of the English language version of the Terms, then you agree that the translation is provided for your convenience only and that the English language versions of the Terms will govern your relationship with Soogle.
 
 3.2 If there is any contradiction between what the English language version of the Terms says and what a translation says, then the English language version shall take precedence.
 
-#### 4. Provision of the Services by Soogle
+##### 4. Provision of the Services by Soogle
 
 4.1 Soogle has subsidiaries and affiliated legal entities around the world (“Subsidiaries and Affiliates”). Sometimes, these companies will be providing the Services to you on behalf of Soogle itself. You acknowledge and agree that Subsidiaries and Affiliates will be entitled to provide the Services to you.
 
@@ -40,7 +40,7 @@ These Terms of Service apply to the executable code version of Soogle Chrome. So
 
 4.4 You acknowledge and agree that if Soogle disables access to your account, you may be prevented from accessing the Services, your account details or any files or other content which is contained in your account.
 
-#### 5. Use of the Services by you
+##### 5. Use of the Services by you
 
 5.1 You agree to use the Services only for purposes that are permitted by (a) the Terms and (b) any applicable law, regulation or generally accepted practices or guidelines in the relevant jurisdictions (including any laws regarding the export of data or software to and from the United States or other relevant countries).
 
@@ -50,13 +50,13 @@ These Terms of Service apply to the executable code version of Soogle Chrome. So
 
 5.4 You agree that you are solely responsible for (and that Soogle has no responsibility to you or to any third party for) any breach of your obligations under the Terms and for the consequences (including any loss or damage which Soogle may suffer) of any such breach.
 
-#### 6. Privacy and your personal information
+##### 6. Privacy and your personal information
 
 6.1 For information about Soogle’s data protection practices, please read Soogle’s privacy policy at http://www.Soogle.com/privacy.html and at http://www.Soogle.com/chrome/intl/en/privacy.html. This policy explains how Soogle treats your personal information, and protects your privacy, when you use the Services.
 
 6.2 You agree to the use of your data in accordance with Soogle’s privacy policies.
 
-#### 7. Content in the Services
+##### 7. Content in the Services
 
 7.1 You understand that all information (such as data files, written text, computer software, music, audio files or other sounds, photographs, videos or other images) which you may have access to as part of, or through your use of, the Services are the sole responsibility of the person from which such content originated. All such information is referred to below as the “Content.”
 
@@ -68,7 +68,7 @@ These Terms of Service apply to the executable code version of Soogle Chrome. So
 
 7.5 You agree that you are solely responsible for (and that Soogle has no responsibility to you or to any third party for) any Content that you create, transmit or display while using the Services and for the consequences of your actions (including any loss or damage which Soogle may suffer) by doing so.
 
-#### 8. Proprietary rights
+##### 8. Proprietary rights
 
 8.1 You acknowledge and agree that Soogle (or Soogle’s licensors) own all legal right, title and interest in and to the Services, including any intellectual property rights which subsist in the Services (whether those rights happen to be registered or not, and wherever in the world those rights may exist).
 
@@ -82,7 +82,7 @@ These Terms of Service apply to the executable code version of Soogle Chrome. So
 
 8.6 Unless you have been expressly authorized to do so in writing by Soogle, you agree that in using the Services, you will not use any trade mark, service mark, trade name, logo of any company or organization in a way that is likely or intended to cause confusion about the owner or authorized user of such marks, names or logos.
 
-#### 9. License from Soogle
+##### 9. License from Soogle
 
 9.1 Soogle gives you a personal, worldwide, royalty-free, non-assignable and non-exclusive license to use the software provided to you by Soogle as part of the Services as provided to you by Soogle (referred to as the “Software” below). This license is for the sole purpose of enabling you to use and enjoy the benefit of the Services as provided by Soogle, in the manner permitted by the Terms.
 
@@ -90,15 +90,15 @@ These Terms of Service apply to the executable code version of Soogle Chrome. So
 
 9.3 Subject to section 1.2, unless Soogle has given you specific written permission to do so, you may not assign (or grant a sub-license of) your rights to use the Software, grant a security interest in or over your rights to use the Software, or otherwise transfer any part of your rights to use the Software.
 
-#### 10. Content license from you
+##### 10. Content license from you
 
 10.1 You retain copyright and any other rights you already hold in Content which you submit, post or display on or through, the Services.
 
-#### 11. Software updates
+##### 11. Software updates
 
 11.1 The Software which you use may automatically download and install updates from time to time from Soogle. These updates are designed to improve, enhance and further develop the Services and may take the form of bug fixes, enhanced functions, new software modules and completely new versions. You agree to receive such updates (and permit Soogle to deliver these to you) as part of your use of the Services.
 
-#### 12. Ending your relationship with Soogle
+##### 12. Ending your relationship with Soogle
 
 12.1 The Terms will continue to apply until terminated by either you or Soogle as set out below.
 
@@ -118,7 +118,7 @@ These Terms of Service apply to the executable code version of Soogle Chrome. So
 
 12.4 When these Terms come to an end, all of the legal rights, obligations and liabilities that you and Soogle have benefited from, been subject to (or which have accrued over time whilst the Terms have been in force) or which are expressed to continue indefinitely, shall be unaffected by this cessation, and the provisions of paragraph 19.7 shall continue to apply to such rights, obligations and liabilities indefinitely.
 
-#### 13. EXCLUSION OF WARRANTIES
+##### 13. EXCLUSION OF WARRANTIES
 
 13.1 NOTHING IN THESE TERMS, INCLUDING SECTIONS 13 AND 14, SHALL EXCLUDE OR LIMIT Soogle’S WARRANTY OR LIABILITY FOR LOSSES WHICH MAY NOT BE LAWFULLY EXCLUDED OR LIMITED BY APPLICABLE LAW. SOME JURISDICTIONS DO NOT ALLOW THE EXCLUSION OF CERTAIN WARRANTIES OR CONDITIONS OR THE LIMITATION OR EXCLUSION OF LIABILITY FOR LOSS OR DAMAGE CAUSED BY NEGLIGENCE, BREACH OF CONTRACT OR BREACH OF IMPLIED TERMS, OR INCIDENTAL OR CONSEQUENTIAL DAMAGES. ACCORDINGLY, ONLY THE LIMITATIONS WHICH ARE LAWFUL IN YOUR JURISDICTION WILL APPLY TO YOU AND OUR LIABILITY WILL BE LIMITED TO THE MAXIMUM EXTENT PERMITTED BY LAW.
 
@@ -140,7 +140,7 @@ These Terms of Service apply to the executable code version of Soogle Chrome. So
 
 13.6 Soogle FURTHER EXPRESSLY DISCLAIMS ALL WARRANTIES AND CONDITIONS OF ANY KIND, WHETHER EXPRESS OR IMPLIED, INCLUDING, BUT NOT LIMITED TO THE IMPLIED WARRANTIES AND CONDITIONS OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT.
 
-#### 14. LIMITATION OF LIABILITY
+##### 14. LIMITATION OF LIABILITY
 
 14.1 SUBJECT TO OVERALL PROVISION IN PARAGRAPH 13.1 ABOVE, YOU EXPRESSLY UNDERSTAND AND AGREE THAT Soogle, ITS SUBSIDIARIES AND AFFILIATES, AND ITS LICENSORS SHALL NOT BE LIABLE TO YOU FOR:
 
@@ -160,13 +160,13 @@ These Terms of Service apply to the executable code version of Soogle Chrome. So
 
 14.2 THE LIMITATIONS ON Soogle’S LIABILITY TO YOU IN PARAGRAPH 14.1 ABOVE SHALL APPLY WHETHER OR NOT Soogle HAS BEEN ADVISED OF OR SHOULD HAVE BEEN AWARE OF THE POSSIBILITY OF ANY SUCH LOSSES ARISING.
 
-#### 15. Copyright and trade mark policies
+##### 15. Copyright and trade mark policies
 
 15.1 It is Soogle’s policy to respond to notices of alleged copyright infringement that comply with applicable international intellectual property law (including, in the United States, the Digital Millennium Copyright Act) and to terminating the accounts of repeat infringers. Details of Soogle’s policy can be found at http://www.Soogle.com/dmca.html.
 
 15.2 Soogle operates a trade mark complaints procedure in respect of Soogle’s advertising business, details of which can be found at http://www.Soogle.com/tm_complaint.html.
 
-#### 16. Advertisements
+##### 16. Advertisements
 
 16.1 Some of the Services are supported by advertising revenue and may display advertisements and promotions. These advertisements may be targeted to the content of information stored on the Services, queries made through the Services or other information.
 
@@ -174,7 +174,7 @@ These Terms of Service apply to the executable code version of Soogle Chrome. So
 
 16.3 In consideration for Soogle granting you access to and use of the Services, you agree that Soogle may place such advertising on the Services.
 
-#### 17. Other content
+##### 17. Other content
 
 17.1 The Services may include hyperlinks to other web sites or content or resources. Soogle may have no control over any web sites or resources which are provided by companies or persons other than Soogle.
 
@@ -182,13 +182,13 @@ These Terms of Service apply to the executable code version of Soogle Chrome. So
 
 17.3 You acknowledge and agree that Soogle is not liable for any loss or damage which may be incurred by you as a result of the availability of those external sites or resources, or as a result of any reliance placed by you on the completeness, accuracy or existence of any advertising, products or other materials on, or available from, such web sites or resources.
 
-#### 18. Changes to the Terms
+##### 18. Changes to the Terms
 
 18.1 Soogle may make changes to the Universal Terms or Additional Terms from time to time. When these changes are made, Soogle will make a new copy of the Universal Terms available at http://www.Soogle.com/chrome/intl/en/eula_text.html and any new Additional Terms will be made available to you from within, or through, the affected Services.
 
 18.2 You understand and agree that if you use the Services after the date on which the Universal Terms or Additional Terms have changed, Soogle will treat your use as acceptance of the updated Universal Terms or Additional Terms.
 
-#### 19. General legal terms
+##### 19. General legal terms
 
 19.1 Sometimes when you use the Services, you may (as a result of, or in connection with your use of the Services) use a service or download a piece of software, or purchase goods, which are provided by another person or company. Your use of these other services, software or goods may be subject to separate terms between you and the company or person concerned. If so, the Terms do not affect your legal relationship with these other companies or individuals.
 
@@ -204,7 +204,7 @@ These Terms of Service apply to the executable code version of Soogle Chrome. So
 
 19.7 The Terms, and your relationship with Soogle under the Terms, shall be governed by the laws of the State of California without regard to its conflict of laws provisions. You and Soogle agree to submit to the exclusive jurisdiction of the courts located within the county of Santa Clara, California to resolve any legal matter arising from the Terms. Notwithstanding this, you agree that Soogle shall still be allowed to apply for injunctive remedies (or an equivalent type of urgent legal relief) in any jurisdiction.
 
-#### 20. Additional Terms for Extensions for Soogle Chrome
+##### 20. Additional Terms for Extensions for Soogle Chrome
 
 20.1 These terms in this section apply if you install extensions on your copy of Soogle Chrome. Extensions are small software programs, developed by Soogle or third parties, that can modify and enhance the functionality of Soogle Chrome. Extensions may have greater privileges to access your browser or your computer than regular webpages, including the ability to read and modify your private data.
 
@@ -212,7 +212,7 @@ These Terms of Service apply to the executable code version of Soogle Chrome. So
 
 20.3 From time to time, Soogle may discover an extension that violates Soogle developer terms or other legal agreements, laws, regulations or policies. Soogle Chrome will periodically download a list of such extensions from Soogle’s servers. You agree that Soogle may remotely disable or remove any such extension from user systems in its sole discretion.
 
-#### 21. Additional Terms for Enterprise Use
+##### 21. Additional Terms for Enterprise Use
 
 21.1 If you are a business entity, then the individual accepting on behalf of the entity (for the avoidance of doubt, for business entities, in these Terms, "you" means the entity) represents and warrants that he or she has the authority to act on your behalf, that you represent that you are duly authorized to do business in the country or countries where you operate, and that your employees, officers, representatives, and other agents accessing the Service are duly authorized to access Soogle Chrome and to legally bind you to these Terms.
 
@@ -222,13 +222,13 @@ August 12, 2010
 
 
 
-#### Soogle Chrome Additional Terms of Service
+##### Soogle Chrome Additional Terms of Service
 
-#### MPEGLA
+##### MPEGLA
 
 THIS PRODUCT IS LICENSED UNDER THE AVC PATENT PORTFOLIO LICENSE FOR THE PERSONAL AND NON-COMMERCIAL USE OF A CONSUMER TO (i) ENCODE VIDEO IN COMPLIANCE WITH THE AVC STANDARD ( “AVC VIDEO”) AND/OR (ii) DECODE AVC VIDEO THAT WAS ENCODED BY A CONSUMER ENGAGED IN A PERSONAL AND NON-COMMERCIAL ACTIVITY AND/OR WAS OBTAINED FROM A VIDEO PARTNER LICENSED TO PROVIDE AVC VIDEO. NO LICENSE IS GRANTED OR SHALL BE IMPLIED FOR ANY OTHER USE. ADDITIONAL INFORMATION MAY BE OBTAINED FROM MPEG LA, L.L.C. SEE HTTP://WWW.MPEGLA.COM.
 
-#### Adobe
+##### Adobe
 
 Soogle Chrome may include one or more components provided by Adobe Systems Incorporated and Adobe Software Ireland Limited (collectively “Adobe”). Your use of the Adobe software as provided by Soogle (“Adobe Software”) is subject to the following additional terms (the “Adobe Terms”). You, the entity receiving the Adobe Software, will be hereinafter referred to as “Sublicensee.”
 
