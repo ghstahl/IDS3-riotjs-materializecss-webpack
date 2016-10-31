@@ -71,6 +71,11 @@ import './simple-select.tag'
             },
         }
 
+        self.on('mount',function(){
+            //self.doValidationCheck(true)
+            Materialize.updateTextFields()
+            self.update()
+        })
         self.onStateInit = (state) =>{
             self.state = state;
             self.ddState.dragTarget.data = state.scopes;
@@ -79,7 +84,10 @@ import './simple-select.tag'
             ]);
             self.friendlyNameState = {value:self.state.friendlyName}
             self.triggerEvent(self.frientlyNameSeed + '-state-init',[self.friendlyNameState]);
-            self.doValidationCheck(true)
+            self.triggerEvent(self.flowTypeSeed + '-state-init',[self.flowState]);
+            Materialize.updateTextFields()
+            self.update()
+           // self.doValidationCheck(true)
         }
 
         self.onSubmit = function() {
@@ -118,9 +126,11 @@ import './simple-select.tag'
                 self.validProgress = percent;
             }
             self.update()
-            opts.state.ddState = self.ddState;
-            opts.state.flowState = self.flowState;
-            opts.state.friendlyNameState = self.friendlyNameState;
+            if(opts.state){
+                opts.state.ddState = self.ddState;
+                opts.state.flowState = self.flowState;
+                opts.state.friendlyNameState = self.friendlyNameState;
+            }
             if(force){
                 self.triggerEvent(self.opts.name+'-valid',[self.isFormValid]);
             }

@@ -8,7 +8,7 @@
         </div>
     </div>
     <style scoped>
-        .stepper-panel-container .footer{
+        .stepper-panel-container .footer3{
             border-top:1px solid gainsboro;
             padding-top: 4px;
         }

@@ -4,12 +4,13 @@ import './components/stepper.tag'
 import './components/mcc1.tag'
 import './components/mcc2.tag'
 import './components/mcc3.tag'
+import './components/mcc-consolidated-panel.tag'
 
 <modal-fun>
     <div class="section">
         <div class="container">
             <a class="waves-effect waves-light btn"
-               onclick={onOpenClose}>Agree/Diasagree</a>
+               onclick={onOpenClose}>Agree/Disagree</a>
             <a class="waves-effect waves-light btn"
                onclick={onOpenClose2}>Consolidated</a>
         </div>
@@ -34,7 +35,7 @@ import './components/mcc3.tag'
     <!-- Modal Structure -->
     <div id="modal2" class="modal">
         <div class="modal-content">
-            <h4>Company EULA</h4>
+            <h4>Consolidated Form</h4>
             <consolidated-form-inner name="cft" state={cftInnerState}></consolidated-form-inner>
         </div>
 
@@ -47,7 +48,7 @@ import './components/mcc3.tag'
         </div>
     </div>
 
-    <stepper name="cc" state={ccStepperState}></stepper>
+    <stepper name="cc-stepper" state={ccStepperState}></stepper>
 
     <style scoped>
         .modal { width: 75% !important ; max-height: 100% !important ; overflow-y: hidden !important ;}
@@ -62,32 +63,45 @@ import './components/mcc3.tag'
         self.stepState = {
             step1: {
                 id:1,
+                invalid:"invalid",
                 name:'mcc1',
                 tag:'mcc1',
                 title: 'Soogle Company End User License Agreement',
                 description:'Accept our EULA or we will Soogle you!',
                 active: '',
+                step:{
+                    primary:true,
+                },
                 contentHide:'',
                 custom:{
-                    eula:"We are constantly changing and improving our Services. We may add or remove functionalities or features, and we may suspend or stop a Service altogether.\nYou can stop using our Services at any time, although we’ll be sorry to see you go. Google may also stop providing Services to you, or add or create new limits to our Services at any time.\nWe believe that you own your data and preserving your access to such data is important. If we discontinue a Service, where reasonably possible, we will give you reasonable advance notice and a chance to get information out of that Service.\n…you give Google a perpetual, irrevocable, worldwide, royalty-free, and non-exclusive license to reproduce, adapt, modify, translate, publish, publicly perform, publicly display and distribute any Content which you submit, post or display on or through, the Services."
+                    eula:"placeholder"
                 }
             },
             step2: {
                 id:2,
-                name:'mcc2',
-                tag:'mcc2',
-                title: 'step_2',
-                description:'description step_2',
+                invalid:"invalid",
+                name:'mcc-consolidated-panel',
+                tag:'mcc-consolidated-panel',
+                title: 'Consolidated',
+                description:'Consolidate this.',
                 active: 'inactive',
+                 step:{
+                 primary:false,
+                 },
                 contentHide:'content-hide',
+                cftState:{},
             },
             step3: {
                 id:3,
+                invalid:"invalid",
                 name:'mcc3',
                 tag:'mcc3',
                 title: 'step_3',
                 description:'description step_3',
                 active: 'inactive',
+                step:{
+                    primary:false,
+                },
                 contentHide:'content-hide',
             },
         }
@@ -98,23 +112,32 @@ import './components/mcc3.tag'
             friendlyName:"Some Friendly Name",
             scopes:[]
         }
-        self.cftInnerState = {}
+
         self.formDisabled = true;
 
         self.onEulaFetch = (result) =>{
-            console.log('eula-fetched',result)
             self.stepState.step1.custom.eula = result
             self.triggerEvent('mcc1-state-init',[self.ccStepperState.step1]);
         }
 
-        self.on('mount',function(){
+        self.on('before-mount',function(){
             self.initCFTState()
+        })
+
+        self.on('mount',function(){
             var url = "https://raw.githubusercontent.com/ghstahl/IDS3-riotjs-materializecss-webpack/master/eula.md";
             RiotControl.trigger('fetch-text',url,null,{name:'eula-fetched'});
             self.triggerEvent('cft-state-init',[self.cftState]);
             self.ccStepperState = self.stepState;
-            self.triggerEvent('cc-state-init',[self.ccStepperState]);
+            self.triggerEvent('cc-stepper-state-init',[self.ccStepperState]);
+
+            for (var key in self.ccStepperState) {
+                var current = self.stepState[key];
+                // fan out
+                self.triggerEvent(current.name + '-state-init', [current]);
+            }
         })
+
 
         self.initCFTState = () => {
             var cftState = {
@@ -122,6 +145,11 @@ import './components/mcc3.tag'
                 scopes:[]
             }
             self.cftState = cftState;
+            var cftState2 = {
+                friendlyName:"Some Friendly Name2",
+                scopes:[]
+            }
+            self.stepState.step2.cftState = cftState2;
         }
 
         self.onOpenClose = () =>{
@@ -160,7 +188,7 @@ import './components/mcc3.tag'
                 self.output =  self.jsFriendlyJSONStringify(self.cftInnerState);
 
                 self.initCFTState()
-                self.triggerEvent('cft-state-init',[self.cftState]);
+        //        self.triggerEvent('cft-state-init',[self.cftState]);
                 self.update()
                 $("#modal2").closeModal()
             }
@@ -168,12 +196,15 @@ import './components/mcc3.tag'
 
         self.onMccContinue = ( ) =>{
             console.log('mcc1-continue')
-            self.triggerEvent('cc-next')
+            self.triggerEvent('cc-stepper-next')
         }
 
-        self.registerObserverableEventHandler(
-                'mcc1-continue',
-                self.onMccContinue)
+        for (var key in self.stepState) {
+            var current = self.stepState[key]
+            self.registerObserverableEventHandler(
+                    current.name + '-continue',
+                    self.onMccContinue)
+        }
 
         self.registerObserverableEventHandler(
                 'cft-submit',
