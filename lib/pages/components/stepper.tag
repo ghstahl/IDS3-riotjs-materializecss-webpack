@@ -160,7 +160,7 @@
         }
         .stepper .step .footer .btn, .stepper .step .footer .btn-large, .stepper .step .footer .btn-flat {
             float: right;
-            margin: 6px 0;
+            margin: 6px 4px;
         }
 
         .stepper .step.invalid .circle3{

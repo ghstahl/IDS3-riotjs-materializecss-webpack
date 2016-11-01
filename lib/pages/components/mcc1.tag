@@ -13,9 +13,12 @@ import marked from 'marked'
             </div>
         </yield>
         <yield to="footer">
-            <a class="waves-effect waves-light btn {parent.state.custom.eulaAgreed}"
-                disabled={parent.state.custom.disabled}
-               onclick={parent.onAgree}>Agree</a>
+            <a class="waves-effect waves-light btn {parent.state.state.eulaAgreed}"
+                                                    disabled={parent.state.state.disabled}
+                                                    onclick={parent.onAgree}>Agree</a>
+            <a class="waves-effect waves-light btn"
+               onclick={parent.onDisagree}>Disagree</a>
+
         </yield>
     </stepper-panel>
     <style scoped>
@@ -50,7 +53,7 @@ import marked from 'marked'
             self.progressValue += 15;
             if(self.progressValue >= 100){
                 self.progressValue = 100;
-                self.state.custom.disabled = false;
+                self.state.state.disabled = false;
                 clearInterval(self.timer)
             }
             self.update();
@@ -78,19 +81,29 @@ import marked from 'marked'
             console.log(marked('I am using __markdown__.'));
             self.timer = setInterval(self.tick, 300)
         })
+        self.onDisagree = (e) =>{
+            console.log('mcc1 onDisagree',e.item);
+            self.triggerEvent(opts.name+'-dirty',[self.state])
+        }
         self.onAgree = (e) =>{
             console.log('mcc1 stepContinue',e.item);
-            self.state.custom.eulaAgreed="eula-agreed"
-            self.state.custom.disabled = true;
+            self.state.state.eulaAgreed="eula-agreed"
+            self.state.state.disabled = true;
             self.triggerEvent(opts.name+'-continue')
+        }
+        self.makeDirty = () =>{
+            self.state.state.disabled = false;
+            self.state.state.eulaAgreed = "";
+
         }
         self.onStateInit = (state) =>{
             self.state = state;
 
             console.log('mcc1: onStateInit',self.state)
-            self.markdown = self.state.custom.eula
-            self.state.custom.disabled = true;
-            self.state.custom.eulaAgreed = "";
+            self.markdown = self.state.state.eula
+            self.state.makeDirty = self.makeDirty;
+            self.makeDirty();
+            self.state.state.disabled = true; // want the button grey, the timer will light it up
             self.update();
         }
         // place mixins here that require stuff to already exist.

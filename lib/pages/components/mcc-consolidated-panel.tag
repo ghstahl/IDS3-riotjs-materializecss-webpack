@@ -4,11 +4,11 @@ import './consolidated-form-inner.tag'
 <mcc-consolidated-panel>
     <stepper-panel>
         <yield to="body">
-            <consolidated-form-inner name={parent.cfiName} state={parent.state.cftState}></consolidated-form-inner>
+            <consolidated-form-inner name={parent.cfiName} state={parent.state.state}></consolidated-form-inner>
        </yield>
         <yield to="footer">
-            <a class="waves-effect waves-light btn {parent.state.cftState.disabledState}"
-               disabled ={parent.state.cftState.disabled}
+            <a class="waves-effect waves-light btn {parent.state.state.disabledState}"
+               disabled ={parent.state.state.disabled}
                onclick={parent.onSubmit}>Next</a>
         </yield>
     </stepper-panel>
@@ -38,30 +38,43 @@ import './consolidated-form-inner.tag'
         self.on('mount',function(){
             console.log('mcc-consolidated-panel mount',self,opts.name,opts.state);
             self.state = opts.state
-            self.state.cftState.disabled = true;
-            self.state.cftState.disabledState = "disabled-state";
-
-            self.triggerEvent(self.cfiName + '-state-init',[self.state.cftState]);
+            self.state.state.valid = false
+            self.state.makeDirty = self.makeDirty;
+            self.state.makeDirty()
+            self.triggerEvent(self.cfiName + '-state-init',[self.state.state]);
             self.update()
         })
 
+        self.makeDirty = () =>{
+            self.checkValidity()
+            if(self.state.state.valid){
+                // turn it on so the the user has to resumbit
+                self.state.state.disabled = false
+                self.state.state.disabledState = ""
+            }
+            self.update()
+        }
         self.onSubmit = (e) =>{
             console.log('mcc-consolidated-panel stepContinue',e.item);
-            self.state.cftState.disabled = true
-            self.state.cftState.disabledState = "disabled-state"
+            self.state.state.disabled = true
+            self.state.state.disabledState = "disabled-state"
             self.triggerEvent(opts.name+'-continue')
         }
 
         self.onStateInit = (state) =>{
             self.state = state;
             console.log('mcc-consolidated-panel-state-init: onStateInit',self.state)
-            self.triggerEvent(self.cfiName + '-state-init',[self.state.cftState]);
+            self.triggerEvent(self.cfiName + '-state-init',[self.state.state]);
             self.update();
         }
 
+        self.checkValidity = () =>{
+            self.state.state.disabled = !self.state.state.valid ;
+            self.state.state.disabledState = self.state.state.valid ==true?"":"disabled-state";
+        }
         self.onCFTValid = (valid) =>{
-            self.state.cftState.disabled = !valid;
-            self.state.cftState.disabledState = valid==true?"":"disabled-state";
+            self.state.state.valid = valid
+            self.checkValidity()
             self.update();
         }
 

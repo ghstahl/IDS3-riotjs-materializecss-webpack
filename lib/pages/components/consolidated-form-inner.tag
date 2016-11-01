@@ -105,6 +105,9 @@ import './simple-select.tag'
 
         self.doValidationCheck = (force) =>
         {
+            if(self.ddState.dragTarget.data === undefined){
+                self.ddState.dragTarget.data = []
+            }
             force = force === undefined?false:force;
             var temp =
                     self.validFriendlyName &&

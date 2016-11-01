@@ -37,6 +37,10 @@
         }
 
         self.validateInput = (force) =>{
+            if(self.opts.state.value === undefined){
+                self.opts.state.value = ""
+            }
+
             var temp = self.opts.state.value.length>= self.opts.minLength
             if(temp != self._isValid){
                 self._isValid = temp

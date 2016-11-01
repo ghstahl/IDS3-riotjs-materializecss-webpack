@@ -73,7 +73,7 @@ import './components/mcc-consolidated-panel.tag'
                     primary:true,
                 },
                 contentHide:'',
-                custom:{
+                state:{
                     eula:"placeholder"
                 }
             },
@@ -85,11 +85,11 @@ import './components/mcc-consolidated-panel.tag'
                 title: 'Consolidated',
                 description:'Consolidate this.',
                 active: 'inactive',
-                 step:{
-                 primary:false,
-                 },
+                step:{
+                    primary:false,
+                },
                 contentHide:'content-hide',
-                cftState:{},
+                state:{},
             },
             step3: {
                 id:3,
@@ -103,6 +103,9 @@ import './components/mcc-consolidated-panel.tag'
                     primary:false,
                 },
                 contentHide:'content-hide',
+                state:{
+                    disabled:true
+                },
             },
         }
 
@@ -116,7 +119,7 @@ import './components/mcc-consolidated-panel.tag'
         self.formDisabled = true;
 
         self.onEulaFetch = (result) =>{
-            self.stepState.step1.custom.eula = result
+            self.stepState.step1.state.eula = result
             self.triggerEvent('mcc1-state-init',[self.ccStepperState.step1]);
         }
 
@@ -149,7 +152,7 @@ import './components/mcc-consolidated-panel.tag'
                 friendlyName:"Some Friendly Name2",
                 scopes:[]
             }
-            self.stepState.step2.cftState = cftState2;
+            self.stepState.step2.state = cftState2;
         }
 
         self.onOpenClose = () =>{
@@ -194,6 +197,34 @@ import './components/mcc-consolidated-panel.tag'
             }
         }
 
+        self.onDirtyPanel = (state) =>{
+            console.log('onDirtyPanel',state)
+            // keep everything up to this state, but disable all the others
+            var found = false
+            for (var key in self.ccStepperState) {
+                var current = self.stepState[key];
+                if(!found){
+                    if(current.name == state.name){
+                        found = true;
+                        current.step.primary = true;
+                        current.active = ''
+                        current.invalid = "invalid"
+                        if(current.makeDirty){
+                            current.makeDirty()
+                        }
+                    }
+                }else{
+                    current.step.primary = false;
+                    current.contentHide = 'content-hide'
+                    current.active = 'inactive'
+                    current.invalid = "invalid"
+                    if(current.makeDirty){
+                        current.makeDirty()
+                    }
+                }
+            }
+            self.update()
+        }
         self.onMccContinue = ( ) =>{
             console.log('mcc1-continue')
             self.triggerEvent('cc-stepper-next')
@@ -204,6 +235,9 @@ import './components/mcc-consolidated-panel.tag'
             self.registerObserverableEventHandler(
                     current.name + '-continue',
                     self.onMccContinue)
+            self.registerObserverableEventHandler(
+                    current.name + '-dirty',
+                    self.onDirtyPanel)
         }
 
         self.registerObserverableEventHandler(

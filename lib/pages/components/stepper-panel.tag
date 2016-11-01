@@ -14,7 +14,7 @@
         }
         .stepper-panel-container  .footer .btn, .stepper  .footer .btn-large, .stepper  .footer .btn-flat {
             float: right;
-            margin: 6px 0;
+            margin: 6px 4px;
         }
     </style>
     <script>
